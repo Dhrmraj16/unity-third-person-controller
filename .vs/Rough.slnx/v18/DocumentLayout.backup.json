@@ -1,0 +1,220 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\PlayerMovement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\playerstatelistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\playerstatelistener.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\gameinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\gameinput.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\pausemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\pausemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\gamesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\gamesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\gameeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\gameeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\timecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\timecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\cursorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\cursorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\gamestatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\gamestatemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|c:\\users\\dharm\\onedrive\\desktop\\first\\unity\\rough for practice\\rough\\assets\\deathmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4CD19DA-EE08-5225-FB19-1D0DFA4113DD}|Assembly-CSharp.csproj|solutionrelative:assets\\deathmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerStateListener.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PlayerStateListener.cs",
+              "RelativeDocumentMoniker": "Assets\\PlayerStateListener.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PlayerStateListener.cs",
+              "RelativeToolTip": "Assets\\PlayerStateListener.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T19:00:44.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TimeController.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\TimeController.cs",
+              "RelativeDocumentMoniker": "Assets\\TimeController.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\TimeController.cs",
+              "RelativeToolTip": "Assets\\TimeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T18:13:47.96Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Enemy.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\Enemy.cs",
+              "RelativeDocumentMoniker": "Assets\\Enemy.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\Enemy.cs",
+              "RelativeToolTip": "Assets\\Enemy.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-27T13:35:33.479Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GameEventManager.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameEventManager.cs",
+              "RelativeDocumentMoniker": "Assets\\GameEventManager.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameEventManager.cs",
+              "RelativeToolTip": "Assets\\GameEventManager.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-26T15:45:00.506Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Player.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\Player.cs",
+              "RelativeDocumentMoniker": "Assets\\Player.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\Player.cs",
+              "RelativeToolTip": "Assets\\Player.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T17:14:17.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GameSession.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameSession.cs",
+              "RelativeDocumentMoniker": "Assets\\GameSession.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameSession.cs",
+              "RelativeToolTip": "Assets\\GameSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-28T17:27:19.979Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PauseMenu.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PauseMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\PauseMenu.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PauseMenu.cs",
+              "RelativeToolTip": "Assets\\PauseMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:52:11.827Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GameInput.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameInput.cs",
+              "RelativeDocumentMoniker": "Assets\\GameInput.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameInput.cs",
+              "RelativeToolTip": "Assets\\GameInput.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T14:39:26.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GameStateManager.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameStateManager.cs",
+              "RelativeDocumentMoniker": "Assets\\GameStateManager.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\GameStateManager.cs",
+              "RelativeToolTip": "Assets\\GameStateManager.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-03T18:21:13.052Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CursorController.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\CursorController.cs",
+              "RelativeDocumentMoniker": "Assets\\CursorController.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\CursorController.cs",
+              "RelativeToolTip": "Assets\\CursorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T14:37:22.959Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DeathMenu.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\DeathMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\DeathMenu.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\DeathMenu.cs",
+              "RelativeToolTip": "Assets\\DeathMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T17:17:35.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlayerMovement.cs",
+              "DocumentMoniker": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PlayerMovement.cs",
+              "RelativeDocumentMoniker": "Assets\\PlayerMovement.cs",
+              "ToolTip": "C:\\Users\\dharm\\OneDrive\\Desktop\\FIRST\\Unity\\Rough for Practice\\Rough\\Assets\\PlayerMovement.cs",
+              "RelativeToolTip": "Assets\\PlayerMovement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-05T14:14:50.474Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
