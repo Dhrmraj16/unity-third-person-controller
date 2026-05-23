@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Rotation")]
-    //[SerializeField] private float rotationSpeed = 720f;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] float turnSmoothTime = 0.5f;
     float turnSmoothVelocity;
@@ -53,16 +52,6 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanMove { get; set; } = true;
     public bool CanJump { get; set; } = true;
-
-    // ANIMATOR VARIABLES
-
-    bool hasJumped = false;
-    bool wasFalling = false;
-    float landingDelayTimer = 0f;
-    [SerializeField] float landingDelay = 0.1f;
-    bool wasGrounded = false;
-    
-
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -142,8 +131,15 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = controller.isGrounded;
 
-        Debug.Log("In Ground Check Method : " + "isGrounded: " + isGrounded + " | velocity.y: " + velocity.y + "coyoteTimer : " + coyoteTimer);
+        if (isGrounded && velocity.y < -10f)
+        {
+            Debug.Log(" HARD LANDING " + velocity.y);
+        }
+        else
+        {
+            Debug.Log(" SOFT LANDING " + velocity.y);
 
+        }
         if (isGrounded)
         {
             coyoteTimer = coyoteTime;
@@ -153,36 +149,6 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimer -= Time.deltaTime;
         }
 
-        if (isGrounded && !wasGrounded)
-        {
-            landingDelayTimer = landingDelay;
-        }
-        else
-        {
-            landingDelayTimer -= Time.deltaTime;
-        }
-
-        wasGrounded = isGrounded;
-
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-            hasJumped = false;
-
-        }
-
-      
-        /*
-        isGrounded = controller.isGrounded;
-        Debug.Log("isGrounded: " + isGrounded + " | velocity.y: " + velocity.y);
-        if (isGrounded)
-            coyoteTimer = coyoteTime;
-        else
-            coyoteTimer -= Time.deltaTime;
-
-        if (isGrounded && velocity.y < 0)
-            velocity.y = -2f;
-        */
     }
 
 
@@ -210,8 +176,6 @@ public class PlayerMovement : MonoBehaviour
 
 
         Vector3 rawInput = (camForward * inputZ + camRight * inputX);
-
-        //Vector3 rawInput = transform.forward * inputZ;
         rawInput.y = 0f;
 
         inputDirection = rawInput.normalized;
@@ -237,6 +201,7 @@ public class PlayerMovement : MonoBehaviour
 
        
         float inputX = Input.GetAxis("Horizontal");
+
         // Case 1) Movement Input normal behaviour
         if (inputDirection.sqrMagnitude > 0.01f)
         {
@@ -273,7 +238,7 @@ public class PlayerMovement : MonoBehaviour
         float SpeedPercent = currentVelocity.magnitude / moveSpeed;
         animator.SetFloat("Speed", SpeedPercent, 0.1f, Time.deltaTime);
 
-        // For Jump Animation 
+        // Condition For Jump Animation 
         bool realGrounded = isGrounded;
         animator.SetBool("isGrounded", realGrounded);
         
@@ -284,20 +249,18 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
+    
     void HandleBufferedJump()
     {
         if (!CanJump) return;
 
-        // JUMP INPUT 
+        // JUMP INPUT (JUMP ALLOW CONDITION)
         if (jumpBufferTimer > 0 && coyoteTimer > 0)
         {
             velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
 
-            // Trigger Only Once 
+            // Trigger Only Once  (FOR ANIMATION)
             animator.SetTrigger("Jump");
-
-            hasJumped = true;
 
             jumpBufferTimer = 0f;
             coyoteTimer = 0f;
@@ -323,8 +286,6 @@ public class PlayerMovement : MonoBehaviour
               velocity.y += gravity * Time.deltaTime;
           }
 
-          // This is For Controlled Fall to Ground
-          //velocity.y += gravity * Time.deltaTime;
         }
     }
 

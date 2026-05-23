@@ -1470,7 +1470,7 @@ MonoBehaviour:
   gravity: -9.81
   coyoteTime: 0.15
   jumpBufferTime: 0.15
-  airControlMultiplier: 0.6
+  airControlMultiplier: 0.3
   knockbackForce: 6
   knockbackDuration: 0.15
 --- !u!143 &764560163
