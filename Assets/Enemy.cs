@@ -59,5 +59,6 @@ public class Enemy : MonoBehaviour
         Debug.Log($"[Enemy] Attacked With amount {AttackAmount}");
         //GameEventManager.RaiseOnDamage(AttackAmount);
         DamageSystem.DamageAttempt(AttackAmount,transform.position);
+
     }
 }

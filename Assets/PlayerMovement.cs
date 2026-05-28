@@ -1,4 +1,5 @@
 
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -52,6 +53,18 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanMove { get; set; } = true;
     public bool CanJump { get; set; } = true;
+
+
+    // For attack animation
+
+    [Header("Combat")]
+    [SerializeField] float attackDuration = 0.6f;
+    [SerializeField] Transform attackPoint;
+    [SerializeField] float attackRadius = 1f;
+    bool isAttacking;
+    float attackTimer;
+
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -94,7 +107,10 @@ public class PlayerMovement : MonoBehaviour
         // 3. Environment check
         GroundCheck();
 
-        // 4. Resolve player intent MOVEMENT 
+        // 4. Attack state Manage
+        UpdateAttackState();
+
+        // 5. Resolve player intent MOVEMENT 
         if (CanMove)
         {
             HandleMovement();
@@ -102,18 +118,23 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
-        // 5.JUMP APPLY (IMPORTANT POSITION)
+        // 6.JUMP APPLY (IMPORTANT POSITION)
         HandleBufferedJump();
 
-        // 6. Forces
+        // 7. Forces
         ApplyGravity();
 
-        // 7. ANIMATOR LAST
+        // 8. ANIMATOR LAST
         UpdateAnimator();
 
-        // 7. Final movement (ONE Move call)
+        // 9. Final movement (ONE Move call)
         UpdateKnockback();
         ApplyFinalMovement();
+
+        //10. Handle Combat movement and animation
+        HandleCombat();
+        //HandleHit();
+
     }
 
 
@@ -133,11 +154,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded && velocity.y < -10f)
         {
-            Debug.Log(" HARD LANDING " + velocity.y);
+            //Debug.Log(" HARD LANDING " + velocity.y);
         }
         else
         {
-            Debug.Log(" SOFT LANDING " + velocity.y);
+            //Debug.Log(" SOFT LANDING " + velocity.y);
 
         }
         if (isGrounded)
@@ -153,7 +174,17 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
+    void UpdateAttackState()
+    {
+        if (isAttacking)
+        {
+            attackTimer -= Time.deltaTime;
+            if (attackTimer <= 0)
+            {
+              isAttacking = false;
+            }
+        }
+    }
 
     void HandleMovement()
     {
@@ -162,6 +193,16 @@ public class PlayerMovement : MonoBehaviour
             horizontalMovement = Vector3.zero;
             return;
         }
+        
+        // Stop moving while attacking animation
+        if (isAttacking)
+        {
+            horizontalMovement = Vector3.zero;
+            return;
+        }
+
+
+        // Movement Physics
         float inputX = Input.GetAxis("Horizontal");
         float inputZ = Input.GetAxis("Vertical");
 
@@ -220,7 +261,7 @@ public class PlayerMovement : MonoBehaviour
         else if (Mathf.Abs(inputX) > 0.1f)
         {
             float turnspeed = 120f;
-            Debug.Log("Function Running");
+            //Debug.Log("Function Running");
             transform.Rotate(Vector3.up, inputX * turnspeed * Time.deltaTime);
         }
         
@@ -237,7 +278,7 @@ public class PlayerMovement : MonoBehaviour
         // For Movement Animation 
         float SpeedPercent = currentVelocity.magnitude / moveSpeed;
         animator.SetFloat("Speed", SpeedPercent, 0.1f, Time.deltaTime);
-
+       
         // Condition For Jump Animation 
         bool realGrounded = isGrounded;
         animator.SetBool("isGrounded", realGrounded);
@@ -253,6 +294,12 @@ public class PlayerMovement : MonoBehaviour
     void HandleBufferedJump()
     {
         if (!CanJump) return;
+
+        // To freeze jump while attacking animation
+        if (isAttacking)
+        {
+            return;
+        }
 
         // JUMP INPUT (JUMP ALLOW CONDITION)
         if (jumpBufferTimer > 0 && coyoteTimer > 0)
@@ -339,10 +386,52 @@ public class PlayerMovement : MonoBehaviour
         Vector3 finalMove = horizontalMovement + velocity + knockbackVelocity;
 
         controller.Move(finalMove * Time.deltaTime);
-        Debug.Log($"Movemenmt Speed is {moveSpeed}");
+        //Debug.Log($"Movemenmt Speed is {moveSpeed}");
     }
 
+    void HandleCombat()
+    {
+        if (Input.GetMouseButtonDown(0) && !isAttacking && isGrounded)
+        {
+            isAttacking = true;
+            attackTimer = attackDuration;
 
+            animator.SetTrigger("Attack");
+
+            //HandleHit();
+            Invoke(nameof(HandleHit), 0.70f);
+        }
+    }
+    void HandleHit()
+    {
+        Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRadius);
+        Debug.Log(hits.Length);
+        foreach (Collider enemy in hits)
+        {
+            if (enemy.CompareTag("Enemy"))
+            {
+                Debug.Log("----Enemy Hit----");
+                //Destroy(enemy.gameObject);       
+                Enemy2 enemyScript = enemy.GetComponent<Enemy2>();
+
+                if (enemyScript != null)
+                {
+                    Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
+
+                    enemyScript.TakeHit(hitDirection, 5f);
+                }
+            }
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null) return;
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+    }
 }
 
 
