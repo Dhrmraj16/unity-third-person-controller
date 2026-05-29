@@ -13,6 +13,10 @@ public class Enemy2 : MonoBehaviour
     [Header("Enemy Health")]
     [SerializeField] private int health = 3;
 
+    [Header("Player Chase")]
+    [SerializeField] private Transform player;
+    [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float stopDistance = 1.5f;
 
     void Awake()
     {
@@ -26,6 +30,16 @@ public class Enemy2 : MonoBehaviour
         originalColor = enemyRenderer.material.color;
     }
 
+    private void Update()
+    {
+        if (!GameStateManager.IsPlaying())
+        {
+            return;
+        }
+
+        // 1). Chase player position
+        ChasePlayer();
+    }
     public void TakeHit(Vector3 hitDirection, float force)
     {
         // Health AI system
@@ -54,5 +68,20 @@ public class Enemy2 : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
 
         enemyRenderer.material.color = originalColor;
+    }
+
+    private void ChasePlayer()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+
+        // To stop the enemy to collapse at the exact player position
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance > stopDistance)
+        {
+
+          transform.position += direction * moveSpeed * Time.deltaTime;
+
+        }
     }
 }
