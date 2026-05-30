@@ -18,6 +18,11 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float stopDistance = 1.5f;
 
+    [Header("Enemy Attack")]
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackCooldown = 1.5f;
+    private float attackTimer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -39,6 +44,9 @@ public class Enemy2 : MonoBehaviour
 
         // 1). Chase player position
         ChasePlayer();
+
+        // 2). Attack Timer Updatation
+        UpdateAttackTimer();
     }
     public void TakeHit(Vector3 hitDirection, float force)
     {
@@ -83,5 +91,28 @@ public class Enemy2 : MonoBehaviour
           transform.position += direction * moveSpeed * Time.deltaTime;
 
         }
+
+        if (distance <= attackRange)
+        {
+            AttackPlayer();
+        }
+    }
+
+    private void UpdateAttackTimer()
+    {
+        attackTimer -= Time.deltaTime;
+    }
+
+    private void AttackPlayer()
+    {
+        if (attackTimer > 0)
+        {
+            return;
+        }
+
+        attackTimer = attackCooldown;
+
+        Debug.Log("-- Enemy attacked player --");
+
     }
 }
