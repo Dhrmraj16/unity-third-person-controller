@@ -64,15 +64,27 @@ public class PlayerMovement : MonoBehaviour
     bool isAttacking;
     float attackTimer;
 
+    [Header("Player Health")]
+    [SerializeField] private int health = 5;
+
+    // CamerShake 
+    CameraShake cameraShakeReff;
+
 
     void Awake()
     {
+        // For character control access
         controller = GetComponent<CharacterController>();
 
+        // For animation access
         if (animator == null)
         {
           animator = GetComponent<Animator>();
         }
+
+        // For cameraShake access
+        cameraShakeReff = GetComponentInChildren<CameraShake>();
+
     }
     void Update()
     {
@@ -345,6 +357,8 @@ public class PlayerMovement : MonoBehaviour
         if (isKnockbackActive) return;
         isKnockbackActive = true;
         Debug.Log($"[PlayerMovement Knockback] Applied : ");
+
+        // Double knockBack activation checkPoint just in case
         if (knockbackTimer > 0f) return;
         Vector3 direction = transform.position - sourcePosition;
         direction.y = 0f;
@@ -405,7 +419,7 @@ public class PlayerMovement : MonoBehaviour
     void HandleHit()
     {
         Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRadius);
-        Debug.Log(hits.Length);
+
         foreach (Collider enemy in hits)
         {
             if (enemy.CompareTag("Enemy"))
@@ -416,10 +430,14 @@ public class PlayerMovement : MonoBehaviour
 
                 if (enemyScript != null)
                 {
+                    // Enemy KnockBack Direction
                     Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
 
                     enemyScript.TakeHit(hitDirection, 5f);
                 }
+
+                // Camera will shake when player hit enemy
+                cameraShakeReff.ShakeTimerUpdate();
             }
         }
     }
@@ -432,6 +450,22 @@ public class PlayerMovement : MonoBehaviour
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
+
+    public void TakeDamage(int damage, Vector3 SourcePosition)
+    {
+        if (health <= 0)
+        {
+            GameStateManager.Die(); 
+            return;
+        }
+
+        health--;
+        Debug.Log("-- PLayer health " + health);
+
+        ApplyKnockback(SourcePosition);
+    }
+
+
 }
 
 

@@ -62,6 +62,7 @@ public class Enemy2 : MonoBehaviour
         // To fresh store the hit direction
         rb.linearVelocity = Vector3.zero;
 
+        // Enemy KnockBack method
         rb.AddForce(hitDirection * force, ForceMode.Impulse);
 
         // Use to execute timed / paused methods 
@@ -114,5 +115,16 @@ public class Enemy2 : MonoBehaviour
 
         Debug.Log("-- Enemy attacked player --");
 
+        PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+
+        if (playerMovement != null)
+        {
+            playerMovement.TakeDamage(1, transform.position);  
+        }
+
     }
+
+    
+
+    
 }
