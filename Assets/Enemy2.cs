@@ -6,9 +6,13 @@ public class Enemy2 : MonoBehaviour
 {
     Rigidbody rb;
 
-    private Renderer enemyRenderer;
+    [SerializeField] private Renderer enemyRenderer;
 
     private Color originalColor;
+
+    // Animator
+    private Animator animator;
+    private bool isAttacking;
 
     [Header("Enemy Health")]
     [SerializeField] private int health = 3;
@@ -26,6 +30,8 @@ public class Enemy2 : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        animator = GetComponent<Animator>();
     }
 
     void Start()
@@ -33,6 +39,12 @@ public class Enemy2 : MonoBehaviour
         enemyRenderer = GetComponent<Renderer>();
 
         originalColor = enemyRenderer.material.color;
+    }
+
+    void OnEnable()
+    {
+        isAttacking = false;
+        animator.Play("idle");
     }
 
     private void Update()
@@ -93,6 +105,14 @@ public class Enemy2 : MonoBehaviour
 
         }
 
+        direction.y = 0;
+        
+        // To look in the direction of Player
+        if (direction != Vector3.zero)
+        {
+            transform.forward = direction;
+        }
+
         if (distance <= attackRange)
         {
             AttackPlayer();
@@ -111,20 +131,32 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
+        if (isAttacking) return;
+
+        isAttacking = true;
+
+        animator.SetTrigger("Attack");
+
+        Invoke(nameof(DealDamage), 0.5f);
+
         attackTimer = attackCooldown;
 
         Debug.Log("-- Enemy attacked player --");
 
-        PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-
-        if (playerMovement != null)
-        {
-            playerMovement.TakeDamage(1, transform.position);  
-        }
-
     }
 
+    private void DealDamage()
+    {
+        PlayerMovement playerMovement =
+            player.GetComponent<PlayerMovement>();
     
+        if (playerMovement != null)
+        {
+            playerMovement.TakeDamage(1, transform.position);
+        }
+    
+        isAttacking = false;
+    }
 
     
 }
