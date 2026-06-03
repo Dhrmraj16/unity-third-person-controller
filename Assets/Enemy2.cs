@@ -13,6 +13,7 @@ public class Enemy2 : MonoBehaviour
     // Animator
     private Animator animator;
     private bool isAttacking;
+    private bool isDead;
 
     [Header("Enemy Health")]
     [SerializeField] private int health = 3;
@@ -41,11 +42,6 @@ public class Enemy2 : MonoBehaviour
         originalColor = enemyRenderer.material.color;
     }
 
-    void OnEnable()
-    {
-        isAttacking = false;
-        animator.Play("idle");
-    }
 
     private void Update()
     {
@@ -62,13 +58,16 @@ public class Enemy2 : MonoBehaviour
     }
     public void TakeHit(Vector3 hitDirection, float force)
     {
+        if (isDead) return;
+
         // Health AI system
         health--;
         Debug.Log("Enemy Health " + health);
 
         if (health <= 0)
         {
-            Destroy(gameObject);
+            Die();
+            return;
         }
 
         // To fresh store the hit direction
@@ -93,6 +92,8 @@ public class Enemy2 : MonoBehaviour
 
     private void ChasePlayer()
     {
+        if (isDead) return;
+
         Vector3 direction = (player.position - transform.position).normalized;
 
         // To stop the enemy to collapse at the exact player position
@@ -126,6 +127,8 @@ public class Enemy2 : MonoBehaviour
 
     private void AttackPlayer()
     {
+        if (isDead) return;
+
         if (attackTimer > 0)
         {
             return;
@@ -158,5 +161,30 @@ public class Enemy2 : MonoBehaviour
         isAttacking = false;
     }
 
-    
+    private void Die()
+    {
+        isDead = true;
+
+        animator.SetTrigger("Death");
+
+        StartCoroutine(DeathRoutine());
+
+        StartCoroutine(DestroyCollider());
+
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        yield return new WaitForSeconds(1.49f);
+
+        Destroy(gameObject);
+    }
+
+    private IEnumerator DestroyCollider()
+    {
+        yield return new WaitForSeconds(1.2f);
+
+        GetComponent<Collider>().enabled = false;
+        
+    }
 }
