@@ -28,6 +28,15 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer;
 
+    [Header("Patrol")]
+    [SerializeField] private Transform pointA;
+    [SerializeField] private Transform pointB;
+    private Transform currentTarget;
+    private bool isPatrollingToB;
+
+    [Header("Detection")]
+    [SerializeField] private float detectionRange = 5f;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -40,6 +49,8 @@ public class Enemy2 : MonoBehaviour
         enemyRenderer = GetComponent<Renderer>();
 
         originalColor = enemyRenderer.material.color;
+
+        currentTarget = pointA;
     }
 
 
@@ -50,8 +61,14 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
-        // 1). Chase player position
-        ChasePlayer();
+        // 1). Condition For in Range Detection 
+       if (CanDetectPlayer())
+        {
+            ChasePlayer();
+        } else
+        {
+            Patrol();
+        }
 
         // 2). Attack Timer Updatation
         UpdateAttackTimer();
@@ -164,12 +181,11 @@ public class Enemy2 : MonoBehaviour
     private void Die()
     {
         isDead = true;
-
+    
+        rb.linearVelocity = Vector3.zero;
         animator.SetTrigger("Death");
 
         StartCoroutine(DeathRoutine());
-
-        StartCoroutine(DestroyCollider());
 
     }
 
@@ -180,11 +196,36 @@ public class Enemy2 : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private IEnumerator DestroyCollider()
+    private void Patrol()
     {
-        yield return new WaitForSeconds(1.2f);
-
-        GetComponent<Collider>().enabled = false;
+        Vector3 direction = (currentTarget.position - transform.position).normalized;   
         
+        transform.position += direction * moveSpeed * Time.deltaTime;
+
+        float distance = Vector3.Distance(transform.position, currentTarget.position);
+
+        if (distance < 0.2f)
+        {
+            if (currentTarget == pointA)
+            {
+                currentTarget = pointB;
+            } else
+            {
+                currentTarget = pointA;
+            }
+        }
+
+        if (direction != Vector3.zero)
+        {
+            transform.forward = direction;
+        }
+    }
+
+    private bool CanDetectPlayer()
+    {
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        return distance <= detectionRange;
+
     }
 }
