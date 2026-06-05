@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class Enemy2 : MonoBehaviour
 {
@@ -21,10 +23,10 @@ public class Enemy2 : MonoBehaviour
     [Header("Player Chase")]
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float stopDistance = 1.5f;
+    [SerializeField] private float stopDistance = 1f;
 
     [Header("Enemy Attack")]
-    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackRange = 1.2f;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer;
 
@@ -32,10 +34,20 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
     private Transform currentTarget;
-    private bool isPatrollingToB;
 
     [Header("Detection")]
     [SerializeField] private float detectionRange = 5f;
+
+    private EnemyState currentState;
+    private enum EnemyState
+    {
+        Patrol,
+        Chase,
+        Attack,
+        Dead
+    }
+
+
 
     void Awake()
     {
@@ -51,7 +63,12 @@ public class Enemy2 : MonoBehaviour
         originalColor = enemyRenderer.material.color;
 
         currentTarget = pointA;
+
+        currentState = EnemyState.Patrol;
     }
+
+
+
 
 
     private void Update()
@@ -61,18 +78,62 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
-        // 1). Condition For in Range Detection 
-       if (CanDetectPlayer())
+        // 1). To check the Detection while Patrolling
+        CanDetectPlayer();
+
+        // 2). To provide Switch between methods 
+        switch (currentState) 
         {
-            ChasePlayer();
-        } else
-        {
-            Patrol();
+            case EnemyState.Patrol:
+                if (CanDetectPlayer()) 
+                { 
+                    StateChange(EnemyState.Chase);
+
+                }
+                else
+                {
+                    Patrol();
+                }
+                    break;
+
+            case EnemyState.Chase:
+                if (!CanDetectPlayer()) 
+                {
+                    StateChange(EnemyState.Patrol);
+
+                } else
+                {
+                    ChasePlayer();
+                }
+                    break;
+
+            case EnemyState.Attack:
+                
+                if (GetDistanceToPlayer() > attackRange)
+                {
+                    StateChange(EnemyState.Chase);
+
+
+                }
+                else
+                {
+                    AttackPlayer();
+                }
+                break;
+        
         }
 
-        // 2). Attack Timer Updatation
+        // 3). Attack Timer Updatation
         UpdateAttackTimer();
+
+        //Debug.Log("CurrentState -- " + currentState);
     }
+
+
+
+
+
+
     public void TakeHit(Vector3 hitDirection, float force)
     {
         if (isDead) return;
@@ -119,7 +180,7 @@ public class Enemy2 : MonoBehaviour
         if (distance > stopDistance)
         {
 
-          transform.position += direction * moveSpeed * Time.deltaTime;
+            transform.position += direction * moveSpeed * Time.deltaTime;
 
         }
 
@@ -133,7 +194,9 @@ public class Enemy2 : MonoBehaviour
 
         if (distance <= attackRange)
         {
-            AttackPlayer();
+            Debug.Log("ChasePlayer method state " + currentState);
+            StateChange(EnemyState.Attack);
+            return;
         }
     }
 
@@ -144,6 +207,8 @@ public class Enemy2 : MonoBehaviour
 
     private void AttackPlayer()
     {
+        //Debug.Log("----------AttackPlayer Trigger----------");
+
         if (isDead) return;
 
         if (attackTimer > 0)
@@ -155,13 +220,14 @@ public class Enemy2 : MonoBehaviour
 
         isAttacking = true;
 
+        //Debug.Log("---Animator Triggered-----");
         animator.SetTrigger("Attack");
 
         Invoke(nameof(DealDamage), 0.5f);
 
         attackTimer = attackCooldown;
 
-        Debug.Log("-- Enemy attacked player --");
+        //Debug.Log("-- Enemy attacked player --");
 
     }
 
@@ -196,6 +262,8 @@ public class Enemy2 : MonoBehaviour
         Destroy(gameObject);
     }
 
+
+
     private void Patrol()
     {
         Vector3 direction = (currentTarget.position - transform.position).normalized;   
@@ -206,6 +274,7 @@ public class Enemy2 : MonoBehaviour
 
         if (distance < 0.2f)
         {
+            
             if (currentTarget == pointA)
             {
                 currentTarget = pointB;
@@ -227,5 +296,20 @@ public class Enemy2 : MonoBehaviour
 
         return distance <= detectionRange;
 
+    }
+    
+    // Returns distance between Enemy and Player
+    private float GetDistanceToPlayer()
+    {
+        return Vector3.Distance(transform.position, player.position);
+    }
+
+    private void StateChange(EnemyState newState)
+    {
+        if (newState == currentState) return;
+
+        currentState = newState;
+
+        Debug.Log("Current state changed to : " + currentState);
     }
 }
