@@ -279,12 +279,15 @@ MonoBehaviour:
   enemyRenderer: {fileID: 9307808}
   health: 3
   player: {fileID: 764560159}
-  moveSpeed: 3
-  stopDistance: 1.1
-  attackRange: 2
+  moveSpeed: 2
+  stopDistance: 0.8
+  attackRange: 1.2
   attackCooldown: 3
   pointA: {fileID: 209212083}
   pointB: {fileID: 1970442876}
+  detectionRange: 5
+  visionAngle: 140
+  loseSightTime: 10
 --- !u!95 &9307813
 Animator:
   serializedVersion: 7
@@ -511,7 +514,7 @@ Transform:
   m_GameObject: {fileID: 209212082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: -0.5, z: 0}
+  m_LocalPosition: {x: 6, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1645,7 +1648,7 @@ Transform:
   m_GameObject: {fileID: 764560157}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: -1.51, z: 0}
+  m_LocalPosition: {x: 10, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2064,7 +2067,7 @@ MonoBehaviour:
   sensitivity: 120
   minPitch: -40
   maxPitch: 70
-  defaultOffset: {x: 0, y: 1.8, z: -4}
+  defaultOffset: {x: 0, y: 1.8, z: -2}
   collisionRadius: 0.3
   collisionPadding: 0.2
   collisionMask:
@@ -3483,7 +3486,7 @@ Transform:
   m_GameObject: {fileID: 1970442875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: -6, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

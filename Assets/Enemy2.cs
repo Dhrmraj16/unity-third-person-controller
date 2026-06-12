@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float stopDistance = 1f;
 
     [Header("Enemy Attack")]
-    [SerializeField] private float attackRange = 1.2f;
+    [SerializeField] private float attackRange = 1f;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer;
 
@@ -37,6 +38,10 @@ public class Enemy2 : MonoBehaviour
 
     [Header("Detection")]
     [SerializeField] private float detectionRange = 5f;
+    [SerializeField] private float visionAngle = 60f;
+    [SerializeField] private float loseSightTime = 2f;
+    private float loseSightTimer;
+    private Vector3 lastKnownPlayerPosition;
 
     private EnemyState currentState;
     private enum EnemyState
@@ -44,8 +49,11 @@ public class Enemy2 : MonoBehaviour
         Patrol,
         Chase,
         Attack,
+        Search,
         Dead
     }
+
+
 
 
 
@@ -78,8 +86,10 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
-        // 1). To check the Detection while Patrolling
-        CanDetectPlayer();
+        
+        // 1). To give location memory to the enemy detection system 
+        //UpdateLoseSightTimer();
+
 
         // 2). To provide Switch between methods 
         switch (currentState) 
@@ -97,15 +107,24 @@ public class Enemy2 : MonoBehaviour
                     break;
 
             case EnemyState.Chase:
-                if (!CanDetectPlayer()) 
+                
+                Debug.Log($"CHASE  Distance:{GetDistanceToPlayer()}  See:{CanSeePlayer()} canDetectPlayer {CanDetectPlayer()}");
+               
+                if (!CanDetectPlayer())
                 {
-                    StateChange(EnemyState.Patrol);
+                    loseSightTimer = loseSightTime;
 
-                } else
+                    //lastKnownPlayerPosition = player.position;
+
+                    //StateChange(EnemyState.Patrol);
+                    StateChange(EnemyState.Search);
+                }
+                else 
                 {
                     ChasePlayer();
                 }
-                    break;
+                break;
+
 
             case EnemyState.Attack:
                 
@@ -113,20 +132,49 @@ public class Enemy2 : MonoBehaviour
                 {
                     StateChange(EnemyState.Chase);
 
-
+                    
                 }
                 else
                 {
                     AttackPlayer();
                 }
                 break;
+
+            case EnemyState.Search:
+
+                loseSightTimer -= Time.deltaTime;
+
+
+                if (CanDetectPlayer()) 
+                {
+                    StateChange(EnemyState.Chase);
+                    break;
+                }
+
+                if (loseSightTimer <= 0f)
+                {
+                    StateChange(EnemyState.Patrol);
+                    break;
+
+                }
+
+                Search();
+
+                Debug.Log("Searching..........................................");
+                break;
+
+            case EnemyState.Dead:
+                break;
+
         
         }
 
         // 3). Attack Timer Updatation
         UpdateAttackTimer();
 
-        //Debug.Log("CurrentState -- " + currentState);
+        //Debug.Log($"Can enemy see player {CanSeePlayer()}");
+        Debug.Log($"Last know Player position is {lastKnownPlayerPosition} and Enemy current position is {transform.position}");
+
     }
 
 
@@ -136,7 +184,8 @@ public class Enemy2 : MonoBehaviour
 
     public void TakeHit(Vector3 hitDirection, float force)
     {
-        if (isDead) return;
+        //if (isDead) return;
+        if (isdead()) return;
 
         // Health AI system
         health--;
@@ -170,7 +219,7 @@ public class Enemy2 : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (isDead) return;
+        if (isdead()) return;
 
         Vector3 direction = (player.position - transform.position).normalized;
 
@@ -179,6 +228,7 @@ public class Enemy2 : MonoBehaviour
 
         if (distance > stopDistance)
         {
+            Debug.Log("-----------------Enemy Chasing--------------");
 
             transform.position += direction * moveSpeed * Time.deltaTime;
 
@@ -207,9 +257,8 @@ public class Enemy2 : MonoBehaviour
 
     private void AttackPlayer()
     {
-        //Debug.Log("----------AttackPlayer Trigger----------");
 
-        if (isDead) return;
+        if (isdead()) return;
 
         if (attackTimer > 0)
         {
@@ -220,14 +269,13 @@ public class Enemy2 : MonoBehaviour
 
         isAttacking = true;
 
-        //Debug.Log("---Animator Triggered-----");
         animator.SetTrigger("Attack");
 
         Invoke(nameof(DealDamage), 0.5f);
 
         attackTimer = attackCooldown;
+        //Debug.Log("-----------------Enemy Attacking--------------");
 
-        //Debug.Log("-- Enemy attacked player --");
 
     }
 
@@ -244,15 +292,23 @@ public class Enemy2 : MonoBehaviour
         isAttacking = false;
     }
 
+
+
     private void Die()
     {
-        isDead = true;
-    
+
+        StateChange(EnemyState.Dead);
+
         rb.linearVelocity = Vector3.zero;
         animator.SetTrigger("Death");
 
         StartCoroutine(DeathRoutine());
 
+    }
+
+    private bool isdead()
+    {
+        return currentState == EnemyState.Dead;
     }
 
     private IEnumerator DeathRoutine()
@@ -270,11 +326,11 @@ public class Enemy2 : MonoBehaviour
         
         transform.position += direction * moveSpeed * Time.deltaTime;
 
+        Debug.Log("-----------------Enemy Petrolling--------------");
         float distance = Vector3.Distance(transform.position, currentTarget.position);
 
         if (distance < 0.2f)
         {
-            
             if (currentTarget == pointA)
             {
                 currentTarget = pointB;
@@ -293,11 +349,12 @@ public class Enemy2 : MonoBehaviour
     private bool CanDetectPlayer()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-
-        return distance <= detectionRange;
+        Debug.Log($"Distance:{distance}  See:{CanSeePlayer()}");
+        return (distance <= detectionRange && CanSeePlayer());
 
     }
     
+
     // Returns distance between Enemy and Player
     private float GetDistanceToPlayer()
     {
@@ -312,4 +369,44 @@ public class Enemy2 : MonoBehaviour
 
         Debug.Log("Current state changed to : " + currentState);
     }
+
+    private bool CanSeePlayer()
+    {
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+
+        float dot = Vector3.Dot(transform.forward, directionToPlayer);
+
+        float visionThreshold = Mathf.Cos(visionAngle * 0.5f * Mathf.Deg2Rad);
+
+        Debug.Log($"Dot: {dot} Threshold: {visionThreshold}");
+        Debug.DrawRay(transform.position,transform.forward * 3,Color.blue);
+        Debug.DrawRay(transform.position,directionToPlayer * 3,Color.red);
+        return dot >= visionThreshold;
+    }
+    
+    //private void UpdateLoseSightTimer()
+    //{
+    //    if (CanDetectPlayer())
+    //    {
+    //        loseSightTimer = loseSightTime;
+
+    //        lastKnownPlayerPosition = player.position;
+
+    //    } else
+    //    {
+    //        loseSightTimer -= Time.deltaTime;
+    //    }
+    //}
+
+    private void Search()
+    {
+
+        Vector3 direction = (lastKnownPlayerPosition - transform.position).normalized;
+
+        transform.position += direction * moveSpeed * Time.deltaTime;
+
+        lastKnownPlayerPosition = player.position;
+
+    }
+
 }
