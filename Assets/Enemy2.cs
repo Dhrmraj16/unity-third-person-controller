@@ -43,6 +43,11 @@ public class Enemy2 : MonoBehaviour
     private float loseSightTimer;
     private Vector3 lastKnownPlayerPosition;
 
+    private bool reachedSearchPosition;
+
+    [SerializeField] private float SearchWaitTime = 2f;
+    private float SearchWaitTimer;
+
     private EnemyState currentState;
     private enum EnemyState
     {
@@ -86,9 +91,9 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
-        
+
         // 1). To give location memory to the enemy detection system 
-        //UpdateLoseSightTimer();
+        UpdateLastKnownPlayerPosition();
 
 
         // 2). To provide Switch between methods 
@@ -114,9 +119,10 @@ public class Enemy2 : MonoBehaviour
                 {
                     loseSightTimer = loseSightTime;
 
-                    //lastKnownPlayerPosition = player.position;
+                    reachedSearchPosition = false;
 
-                    //StateChange(EnemyState.Patrol);
+                    SearchWaitTimer = SearchWaitTime;
+
                     StateChange(EnemyState.Search);
                 }
                 else 
@@ -150,6 +156,21 @@ public class Enemy2 : MonoBehaviour
                     StateChange(EnemyState.Chase);
                     break;
                 }
+                if (!reachedSearchPosition)
+                {
+                    Search();
+
+                }
+                else 
+                {
+                    SearchWaitTimer -= Time.deltaTime;
+
+                    if (SearchWaitTimer <= 0)
+                    {
+                        StateChange(EnemyState.Patrol);
+                    }
+                    break;
+                }
 
                 if (loseSightTimer <= 0f)
                 {
@@ -158,9 +179,8 @@ public class Enemy2 : MonoBehaviour
 
                 }
 
-                Search();
-
                 Debug.Log("Searching..........................................");
+                Search();
                 break;
 
             case EnemyState.Dead:
@@ -173,7 +193,7 @@ public class Enemy2 : MonoBehaviour
         UpdateAttackTimer();
 
         //Debug.Log($"Can enemy see player {CanSeePlayer()}");
-        Debug.Log($"Last know Player position is {lastKnownPlayerPosition} and Enemy current position is {transform.position}");
+        //Debug.Log($"Last know Player position is {lastKnownPlayerPosition} and Enemy current position is {transform.position}");
 
     }
 
@@ -383,29 +403,46 @@ public class Enemy2 : MonoBehaviour
         Debug.DrawRay(transform.position,directionToPlayer * 3,Color.red);
         return dot >= visionThreshold;
     }
-    
-    //private void UpdateLoseSightTimer()
-    //{
-    //    if (CanDetectPlayer())
-    //    {
-    //        loseSightTimer = loseSightTime;
 
-    //        lastKnownPlayerPosition = player.position;
+    private void UpdateLastKnownPlayerPosition()
+    {
+        if (CanDetectPlayer())
+        {
+            lastKnownPlayerPosition = player.position;
 
-    //    } else
-    //    {
-    //        loseSightTimer -= Time.deltaTime;
-    //    }
-    //}
+        }
+
+    }
 
     private void Search()
     {
 
-        Vector3 direction = (lastKnownPlayerPosition - transform.position).normalized;
+        Vector3 direction = lastKnownPlayerPosition - transform.position;
+
+        direction.y = 0f;
+
+        direction.Normalize();
 
         transform.position += direction * moveSpeed * Time.deltaTime;
 
-        lastKnownPlayerPosition = player.position;
+        Vector3 FlatEnemyPos = transform.position;
+        Vector3 FlatTargetPos = lastKnownPlayerPosition;
+
+        FlatEnemyPos.y = 0f;
+        FlatTargetPos.y = 0f;
+
+        float distance = Vector3.Distance(FlatEnemyPos, FlatTargetPos);
+
+        Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and loseSightTimer is {loseSightTimer} and SearchWaitTimer is {SearchWaitTimer}");
+
+
+        if (distance < 0.2f)
+        {
+           Debug.Log($"Reached to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos}");
+            reachedSearchPosition = true;
+            return;
+        }
+
 
     }
 

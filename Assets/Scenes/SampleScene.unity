@@ -287,7 +287,7 @@ MonoBehaviour:
   pointB: {fileID: 1970442876}
   detectionRange: 5
   visionAngle: 140
-  loseSightTime: 10
+  loseSightTime: 3
 --- !u!95 &9307813
 Animator:
   serializedVersion: 7
