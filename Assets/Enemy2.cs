@@ -39,8 +39,6 @@ public class Enemy2 : MonoBehaviour
     [Header("Detection")]
     [SerializeField] private float detectionRange = 5f;
     [SerializeField] private float visionAngle = 60f;
-    [SerializeField] private float loseSightTime = 2f;
-    private float loseSightTimer;
     private Vector3 lastKnownPlayerPosition;
 
     private bool reachedSearchPosition;
@@ -78,6 +76,8 @@ public class Enemy2 : MonoBehaviour
         currentTarget = pointA;
 
         currentState = EnemyState.Patrol;
+
+        UpdateAnimatorState();
     }
 
 
@@ -91,17 +91,21 @@ public class Enemy2 : MonoBehaviour
             return;
         }
 
+        Debug.Log("Current State of Enenmy is -------------- " + currentState);
+
+
 
         // 1). To give location memory to the enemy detection system 
         UpdateLastKnownPlayerPosition();
 
 
+
         // 2). To provide Switch between methods 
-        switch (currentState) 
+        switch (currentState)
         {
             case EnemyState.Patrol:
-                if (CanDetectPlayer()) 
-                { 
+                if (CanDetectPlayer())
+                {
                     StateChange(EnemyState.Chase);
 
                 }
@@ -109,15 +113,14 @@ public class Enemy2 : MonoBehaviour
                 {
                     Patrol();
                 }
-                    break;
+                break;
 
             case EnemyState.Chase:
-                
+
                 Debug.Log($"CHASE  Distance:{GetDistanceToPlayer()}  See:{CanSeePlayer()} canDetectPlayer {CanDetectPlayer()}");
-               
+
                 if (!CanDetectPlayer())
                 {
-                    loseSightTimer = loseSightTime;
 
                     reachedSearchPosition = false;
 
@@ -125,7 +128,7 @@ public class Enemy2 : MonoBehaviour
 
                     StateChange(EnemyState.Search);
                 }
-                else 
+                else
                 {
                     ChasePlayer();
                 }
@@ -133,12 +136,12 @@ public class Enemy2 : MonoBehaviour
 
 
             case EnemyState.Attack:
-                
+
                 if (GetDistanceToPlayer() > attackRange)
                 {
                     StateChange(EnemyState.Chase);
 
-                    
+
                 }
                 else
                 {
@@ -148,45 +151,40 @@ public class Enemy2 : MonoBehaviour
 
             case EnemyState.Search:
 
-                loseSightTimer -= Time.deltaTime;
-
-
-                if (CanDetectPlayer()) 
+                if (CanDetectPlayer())
                 {
                     StateChange(EnemyState.Chase);
                     break;
                 }
                 if (!reachedSearchPosition)
                 {
+                    Debug.Log("Searching..........................................");
                     Search();
 
                 }
-                else 
+                else
                 {
+
                     SearchWaitTimer -= Time.deltaTime;
+                    Debug.Log($"SearchWaitTimer is {SearchWaitTimer} and enemy position {transform.position}");
 
                     if (SearchWaitTimer <= 0)
                     {
                         StateChange(EnemyState.Patrol);
                     }
-                    break;
-                }
-
-                if (loseSightTimer <= 0f)
-                {
-                    StateChange(EnemyState.Patrol);
-                    break;
+                    else
+                    {
+                        transform.Rotate(0f, 60f * Time.deltaTime, 0f);
+                    }
 
                 }
-
-                Debug.Log("Searching..........................................");
-                Search();
                 break;
+
 
             case EnemyState.Dead:
                 break;
 
-        
+
         }
 
         // 3). Attack Timer Updatation
@@ -255,7 +253,7 @@ public class Enemy2 : MonoBehaviour
         }
 
         direction.y = 0;
-        
+
         // To look in the direction of Player
         if (direction != Vector3.zero)
         {
@@ -303,12 +301,12 @@ public class Enemy2 : MonoBehaviour
     {
         PlayerMovement playerMovement =
             player.GetComponent<PlayerMovement>();
-    
+
         if (playerMovement != null)
         {
             playerMovement.TakeDamage(1, transform.position);
         }
-    
+
         isAttacking = false;
     }
 
@@ -342,8 +340,8 @@ public class Enemy2 : MonoBehaviour
 
     private void Patrol()
     {
-        Vector3 direction = (currentTarget.position - transform.position).normalized;   
-        
+        Vector3 direction = (currentTarget.position - transform.position).normalized;
+
         transform.position += direction * moveSpeed * Time.deltaTime;
 
         Debug.Log("-----------------Enemy Petrolling--------------");
@@ -354,7 +352,8 @@ public class Enemy2 : MonoBehaviour
             if (currentTarget == pointA)
             {
                 currentTarget = pointB;
-            } else
+            }
+            else
             {
                 currentTarget = pointA;
             }
@@ -373,7 +372,7 @@ public class Enemy2 : MonoBehaviour
         return (distance <= detectionRange && CanSeePlayer());
 
     }
-    
+
 
     // Returns distance between Enemy and Player
     private float GetDistanceToPlayer()
@@ -388,6 +387,8 @@ public class Enemy2 : MonoBehaviour
         currentState = newState;
 
         Debug.Log("Current state changed to : " + currentState);
+
+        UpdateAnimatorState();
     }
 
     private bool CanSeePlayer()
@@ -399,8 +400,8 @@ public class Enemy2 : MonoBehaviour
         float visionThreshold = Mathf.Cos(visionAngle * 0.5f * Mathf.Deg2Rad);
 
         Debug.Log($"Dot: {dot} Threshold: {visionThreshold}");
-        Debug.DrawRay(transform.position,transform.forward * 3,Color.blue);
-        Debug.DrawRay(transform.position,directionToPlayer * 3,Color.red);
+        Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
+        Debug.DrawRay(transform.position, directionToPlayer * 3, Color.red);
         return dot >= visionThreshold;
     }
 
@@ -433,16 +434,62 @@ public class Enemy2 : MonoBehaviour
 
         float distance = Vector3.Distance(FlatEnemyPos, FlatTargetPos);
 
-        Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and loseSightTimer is {loseSightTimer} and SearchWaitTimer is {SearchWaitTimer}");
+        Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and SearchWaitTimer is {SearchWaitTimer}");
 
 
-        if (distance < 0.2f)
+        if (distance < 0.1f)
         {
-           Debug.Log($"Reached to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos}");
+            Debug.Log($"Reached to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos}");
+            Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and SearchWaitTimer is {SearchWaitTimer} and reachedSeachrPosition is {reachedSearchPosition}");
+
             reachedSearchPosition = true;
             return;
         }
 
+
+    }
+
+
+
+    private void UpdateAnimatorState()
+    {
+        switch (currentState)
+        {
+            case EnemyState.Patrol:
+
+                animator.SetBool("isWalking", true);
+                animator.SetBool("isRunning", false);
+
+                break;
+
+            case EnemyState.Chase:
+
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", true);
+
+                break;
+
+            case EnemyState.Search:
+
+                animator.SetBool("isWalking", true);
+                animator.SetBool("isRunning", false);
+
+                break;
+
+            case EnemyState.Attack:
+
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", false);
+
+                break;
+
+            case EnemyState.Dead:
+
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", false);
+
+                break;
+        }
 
     }
 
