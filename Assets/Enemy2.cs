@@ -88,7 +88,11 @@ public class Enemy2 : MonoBehaviour
     {
         if (!GameStateManager.IsPlaying())
         {
+            animator.speed = 0f;
             return;
+        } else
+        {
+            animator.speed = 1f;
         }
 
         Debug.Log("Current State of Enenmy is -------------- " + currentState);
@@ -190,9 +194,6 @@ public class Enemy2 : MonoBehaviour
         // 3). Attack Timer Updatation
         UpdateAttackTimer();
 
-        //Debug.Log($"Can enemy see player {CanSeePlayer()}");
-        //Debug.Log($"Last know Player position is {lastKnownPlayerPosition} and Enemy current position is {transform.position}");
-
     }
 
 
@@ -271,6 +272,7 @@ public class Enemy2 : MonoBehaviour
     private void UpdateAttackTimer()
     {
         attackTimer -= Time.deltaTime;
+        Debug.Log("Currently Attack Timer is " + attackTimer);
     }
 
     private void AttackPlayer()

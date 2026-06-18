@@ -285,7 +285,7 @@ MonoBehaviour:
   attackCooldown: 3
   pointA: {fileID: 209212083}
   pointB: {fileID: 1970442876}
-  detectionRange: 5
+  detectionRange: 10
   visionAngle: 140
   SearchWaitTime: 2
 --- !u!95 &9307813
