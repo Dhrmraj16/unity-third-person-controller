@@ -291,6 +291,8 @@ MonoBehaviour:
   SearchWaitTime: 2
   stunDuration: 1
   healthSlider: {fileID: 1280346118}
+  healthFill: {fileID: 482871112}
+  healthBarCanvas: {fileID: 285103360}
 --- !u!95 &9307813
 Animator:
   serializedVersion: 7
@@ -605,7 +607,7 @@ GameObject:
   - component: {fileID: 285103362}
   - component: {fileID: 285103361}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Enemy Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2719,7 +2721,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 20}
+  m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1280346118
 MonoBehaviour:

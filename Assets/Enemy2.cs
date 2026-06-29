@@ -65,6 +65,9 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private Image healthFill;
 
     [SerializeField] private Transform healthBarCanvas;
+    [SerializeField] private float healthBarSetActiveTime = 3f;
+    private float healthBarTimer;
+
 
 
 
@@ -91,6 +94,9 @@ public class Enemy2 : MonoBehaviour
         healthSlider.value = health;
 
         UpdateHealthBar();
+
+        // To make Health Bar invisible at the start of the game
+        healthBarCanvas.gameObject.SetActive(false);
     }
 
 
@@ -136,8 +142,6 @@ public class Enemy2 : MonoBehaviour
                 break;
 
             case EnemyState.Chase:
-
-                //Debug.Log($"CHASE  Distance:{GetDistanceToPlayer()}  See:{CanSeePlayer()} canDetectPlayer {CanDetectPlayer()}");
 
                 if (!CanDetectPlayer())
                 {
@@ -186,7 +190,6 @@ public class Enemy2 : MonoBehaviour
                 {
 
                     SearchWaitTimer -= Time.deltaTime;
-                    //Debug.Log($"SearchWaitTimer is {SearchWaitTimer} and enemy position {transform.position}");
 
                     if (SearchWaitTimer <= 0)
                     {
@@ -210,6 +213,9 @@ public class Enemy2 : MonoBehaviour
         // 3). Attack Timer Updatation
         UpdateAttackTimer();
 
+
+        // 4). HealthBarTimer Updtation 
+        UpdateHealthBarVisibility();
     }
 
     private void LateUpdate()
@@ -222,7 +228,6 @@ public class Enemy2 : MonoBehaviour
 
     public void TakeHit(Vector3 hitDirection, float force)
     {
-        //if (isDead) return;
         if (isdead()) return;
 
         // Hit Aniamtion reaction triggered
@@ -234,6 +239,12 @@ public class Enemy2 : MonoBehaviour
         Debug.Log("Enemy Health " + health);
         healthSlider.value = health;
         UpdateHealthBar();
+
+        // This is to Show HealthBar on screen when enemy Got hit
+        healthBarCanvas.gameObject.SetActive(true);
+        healthBarTimer = healthBarSetActiveTime;
+
+
 
         if (health <= 0)
         {
@@ -298,7 +309,6 @@ public class Enemy2 : MonoBehaviour
 
         if (distance <= attackRange)
         {
-            //Debug.Log("ChasePlayer method state " + currentState);
             StateChange(EnemyState.Attack);
             return;
         }
@@ -307,7 +317,6 @@ public class Enemy2 : MonoBehaviour
     private void UpdateAttackTimer()
     {
         attackTimer -= Time.deltaTime;
-        //Debug.Log("Currently Attack Timer is " + attackTimer);
     }
 
     private void AttackPlayer()
@@ -336,7 +345,6 @@ public class Enemy2 : MonoBehaviour
         Invoke(nameof(DealDamage), 0.5f);
 
         attackTimer = attackCooldown;
-        //Debug.Log("-----------------Enemy Attacking--------------");
 
 
     }
@@ -362,6 +370,7 @@ public class Enemy2 : MonoBehaviour
 
         StateChange(EnemyState.Dead);
 
+        healthBarCanvas.gameObject.SetActive(false);
         rb.linearVelocity = Vector3.zero;
         animator.SetTrigger("Death");
 
@@ -413,7 +422,7 @@ public class Enemy2 : MonoBehaviour
     private bool CanDetectPlayer()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        //Debug.Log($"Distance:{distance}  See:{CanSeePlayer()}");
+
         return (distance <= detectionRange && CanSeePlayer());
 
     }
@@ -444,7 +453,6 @@ public class Enemy2 : MonoBehaviour
 
         float visionThreshold = Mathf.Cos(visionAngle * 0.5f * Mathf.Deg2Rad);
 
-        //Debug.Log($"Dot: {dot} Threshold: {visionThreshold}");
         Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
         Debug.DrawRay(transform.position, directionToPlayer * 3, Color.red);
         return dot >= visionThreshold;
@@ -479,14 +487,8 @@ public class Enemy2 : MonoBehaviour
 
         float distance = Vector3.Distance(FlatEnemyPos, FlatTargetPos);
 
-        //Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and SearchWaitTimer is {SearchWaitTimer}");
-
-
         if (distance < 0.1f)
         {
-            //Debug.Log($"Reached to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos}");
-            //Debug.Log($"Before Reaching to player last known position {FlatTargetPos} and enemy current position {FlatEnemyPos} and distance {distance} and SearchWaitTimer is {SearchWaitTimer} and reachedSeachrPosition is {reachedSearchPosition}");
-
             reachedSearchPosition = true;
             return;
         }
@@ -570,6 +572,22 @@ public class Enemy2 : MonoBehaviour
         {
             healthFill.color = Color.red;
         }
+    }
+
+
+    // To set time or to hide the health bar
+    private void UpdateHealthBarVisibility()
+    {
+        if (!healthBarCanvas.gameObject.activeSelf) return;
+
+        healthBarTimer -= Time.deltaTime;
+
+        if (healthBarTimer <= 0)
+        {
+            healthBarCanvas.gameObject.SetActive(false);
+
+        }
+
     }
 
 }
