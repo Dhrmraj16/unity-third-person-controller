@@ -1,4 +1,3 @@
-
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -40,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airControlMultiplier = 0.7f;
 
     [Header("Knockback")]
-    [SerializeField] private float knockbackForce = 6f;
+    [SerializeField] private float knockbackForce = 3f;
     [SerializeField] private float knockbackDuration = 0.15f;
     private bool isKnockbackActive;
     private CharacterController controller;
@@ -205,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
             horizontalMovement = Vector3.zero;
             return;
         }
-        
+
         // Stop moving while attacking animation
         if (isAttacking)
         {
@@ -356,7 +355,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isKnockbackActive) return;
         isKnockbackActive = true;
-        Debug.Log($"[PlayerMovement Knockback] Applied : ");
 
         // Double knockBack activation checkPoint just in case
         if (knockbackTimer > 0f) return;
@@ -413,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Attack");
 
             //HandleHit();
-            Invoke(nameof(HandleHit), 0.70f);
+            Invoke(nameof(HandleHit), 0.30f);
         }
     }
     void HandleHit()
@@ -424,7 +422,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (enemy.CompareTag("Enemy"))
             {
-                Debug.Log("----Enemy Hit----");
+                Debug.Log("----Enemy Got Hit----");
                 //Destroy(enemy.gameObject);       
                 Enemy2 enemyScript = enemy.GetComponent<Enemy2>();
 
@@ -432,8 +430,9 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Enemy KnockBack Direction
                     Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
+                    hitDirection.y = 0f;
 
-                    enemyScript.TakeHit(hitDirection, 5f);
+                    enemyScript.TakeHit(hitDirection, 3f);
                 }
 
                 // Camera will shake when player hit enemy
