@@ -23,6 +23,9 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private int health = 5;
 
     [Header("Player Chase")]
+
+    public bool CanThink { get; set; } = true;
+
     [SerializeField] private Transform player;
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float stopDistance = 1f;
@@ -60,15 +63,14 @@ public class Enemy2 : MonoBehaviour
         Dead
     }
 
-    [Header("Enemy HealthBar")]
-    [SerializeField] private Slider healthSlider;
+    [Header("Enemy HealthBar")]    [SerializeField] private Slider healthSlider;
     [SerializeField] private Image healthFill;
 
     [SerializeField] private Transform healthBarCanvas;
     [SerializeField] private float healthBarSetActiveTime = 3f;
     private float healthBarTimer;
 
-
+    
 
 
     void Awake()
@@ -76,10 +78,12 @@ public class Enemy2 : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         animator = GetComponent<Animator>();
+        Debug.Log($"Enemy Awake >>>>>>>>>>> {GetInstanceID()} : ");
     }
 
     void Start()
     {
+        Debug.Log($"Enemy Start >>>>>>>>>>> {GetInstanceID()} : ");
         enemyRenderer = GetComponent<Renderer>();
 
         originalColor = enemyRenderer.material.color;
@@ -100,24 +104,40 @@ public class Enemy2 : MonoBehaviour
     }
 
 
-
+    void OnDestroy()
+    {
+        Debug.Log($"Enemy OnDestroy >>>>>>>>>>> {GetInstanceID()} : ");
+    }
 
 
     private void Update()
     {
-        if (!GameStateManager.IsPlaying())
+        //if (!GameStateManager.IsPlaying())
+        //{
+        //    animator.speed = 0f;
+        //    return;
+        //}
+        //else
+        //{
+        //    animator.speed = 1f;
+        //}
+
+        if (!CanThink)
         {
             animator.speed = 0f;
             return;
         }
-        else
-        {
+
+        
             animator.speed = 1f;
-        }
+        
+
         if (isStunned) return;
 
+        Debug.Log($"Enemy Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()} | {currentState}");
 
         Debug.Log("Current State of Enenmy is -------------- " + currentState);
+        Debug.Log("Current State of Game is ----------------" + GameStateManager.currentState);
 
 
 
@@ -267,6 +287,7 @@ public class Enemy2 : MonoBehaviour
 
     private IEnumerator StunRoutine()
     {
+
         yield return new WaitForSeconds(stunDuration);
 
         isStunned = false;
@@ -311,7 +332,7 @@ public class Enemy2 : MonoBehaviour
         {
             StateChange(EnemyState.Attack);
             return;
-        }
+        } 
     }
 
     private void UpdateAttackTimer()

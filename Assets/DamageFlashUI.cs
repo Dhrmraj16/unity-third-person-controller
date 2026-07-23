@@ -28,7 +28,7 @@ public class DamageFlashUI : MonoBehaviour
 
     IEnumerator Flash()
     {
-        flashImage.color = new Color(1,0,0,0.6f);
+        flashImage.color = new Color(1,0,0,0.4f);
         yield return new WaitForSeconds(flashDuration);
         flashImage.color = new Color(1, 0, 0, 0f);
     }

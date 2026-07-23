@@ -1,5 +1,6 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -64,11 +65,25 @@ public class PlayerMovement : MonoBehaviour
     float attackTimer;
 
     [Header("Player Health")]
-    [SerializeField] private int health = 5;
+    [SerializeField] private int maxhealth = 5;
+    private int currentHealth;
+
+    [SerializeField] private Slider playerHealthSlider;
+    [SerializeField] private Image healhtFill;
 
     // CamerShake 
     CameraShake cameraShakeReff;
 
+
+    void Start()
+    {
+        currentHealth = maxhealth;
+
+        playerHealthSlider.minValue = 0f;
+        playerHealthSlider.maxValue = maxhealth;
+
+        UpdateHealthUI();
+    }
 
     void Awake()
     {
@@ -452,18 +467,39 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 SourcePosition)
     {
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
+            currentHealth = 0;
+            UpdateHealthUI();
+
             GameStateManager.Die(); 
             return;
         }
 
-        health--;
-        Debug.Log("-- PLayer health " + health);
-
+        UpdateHealthUI();
+        DamageSystem.ApplyDamage(damage, SourcePosition);
+        currentHealth -= damage;
+        Debug.Log("-- PLayer health " + currentHealth);
         ApplyKnockback(SourcePosition);
     }
 
+    private void UpdateHealthUI()
+    {
+        playerHealthSlider.value = currentHealth;
+
+        float healthPercant = (float)currentHealth / playerHealthSlider.maxValue;
+
+        if (healthPercant > 0.6f)
+        {
+            healhtFill.color = Color.green;
+        } else if (healthPercant > 0.3f)
+        {
+            healhtFill.color = Color.yellow;
+        } else
+        {
+            healhtFill.color = Color.red;
+        }
+    }
 
 }
 

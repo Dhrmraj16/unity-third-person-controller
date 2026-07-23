@@ -17,7 +17,7 @@ public class TimeController : MonoBehaviour
     }
     void HandleStateChanged(GameState state)
     {
-        bool paused = (GameStateManager.currentState != GameState.Playing);
+        bool paused = (state != GameState.Playing);   
         Time.timeScale = paused ? 0f : 1f;
         Debug.Log($"[TimeController's HandleStateChanged] Time = {Time.timeScale} : state = {state}");
     }

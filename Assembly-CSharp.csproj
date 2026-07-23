@@ -65,6 +65,7 @@
     <Compile Include="Assets\GameSession.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
+    <Compile Include="Assets\EnemyHealth.cs" />
     <Compile Include="Assets\TimeController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
@@ -72,8 +73,11 @@
     <Compile Include="Assets\CameraShake.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\DamageFlashUI.cs" />
+    <Compile Include="Assets\EnemyStateListener.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\EnemyHealthUI.cs" />
+    <Compile Include="Assets\DeathMenuUI.cs" />
     <Compile Include="Assets\EnemyMovement.cs" />
     <Compile Include="Assets\PlayerStateListener.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />

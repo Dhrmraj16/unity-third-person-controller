@@ -22,12 +22,12 @@ public class GameInput : MonoBehaviour
             {
                 pausePanel.Resume();
             } 
-            else
-            if (GameStateManager.IsDead())
-            {
-                deathPanel.DeathMenuShow();
+            //else
+            //if (GameStateManager.IsDead())
+            //{
+            //    deathPanel.DeathMenuShow();
 
-            }
+            //}
 
         }
         

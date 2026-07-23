@@ -30,6 +30,17 @@ public class GameStateManager
 
         OnGameStateChanged?.Invoke(currentState);
 
+        if (OnGameStateChanged != null)
+        {
+            foreach(Delegate d in OnGameStateChanged.GetInvocationList())
+            {
+                Debug.Log("Delegated Listed method :- " + d.Method.Name);
+            }
+
+        } else
+        {
+            Debug.Log("----------Delegate List is NULL -------");
+        }
     }
 
     public static void Paused() => GameStateManager.SetState(GameState.Paused);
