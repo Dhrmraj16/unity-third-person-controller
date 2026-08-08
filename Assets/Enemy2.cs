@@ -17,10 +17,6 @@ public class Enemy2 : MonoBehaviour
     // Animator
     private Animator animator;
     private bool isAttacking;
-    private bool isDead;
-
-    [Header("Enemy Health")]
-    [SerializeField] private int health = 5;
 
     [Header("Player Chase")]
 
@@ -54,6 +50,8 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float stunDuration = 1f;
 
     private EnemyState currentState;
+
+    [SerializeField] EnemyState enemyState;
     private enum EnemyState
     {
         Patrol,
@@ -63,12 +61,10 @@ public class Enemy2 : MonoBehaviour
         Dead
     }
 
-    [Header("Enemy HealthBar")]    [SerializeField] private Slider healthSlider;
-    [SerializeField] private Image healthFill;
+    [Header("Enemy HealthBar")]
 
-    [SerializeField] private Transform healthBarCanvas;
-    [SerializeField] private float healthBarSetActiveTime = 3f;
-    private float healthBarTimer;
+    // for Refactoring Enemyhealth
+    [SerializeField] EnemyHealth enemyHealth;
 
     
 
@@ -79,6 +75,12 @@ public class Enemy2 : MonoBehaviour
 
         animator = GetComponent<Animator>();
         Debug.Log($"Enemy Awake >>>>>>>>>>> {GetInstanceID()} : ");
+    }
+
+    void OnEnable()
+    {
+        enemyHealth.OnDied += Die;
+
     }
 
     void Start()
@@ -93,17 +95,12 @@ public class Enemy2 : MonoBehaviour
         currentState = EnemyState.Patrol;
 
         UpdateAnimatorState();
-
-        healthSlider.maxValue = health;
-        healthSlider.value = health;
-
-        UpdateHealthBar();
-
-        // To make Health Bar invisible at the start of the game
-        healthBarCanvas.gameObject.SetActive(false);
     }
 
-
+    void OnDisable()
+    {
+        enemyHealth.OnDied -= Die;
+    }
     void OnDestroy()
     {
         Debug.Log($"Enemy OnDestroy >>>>>>>>>>> {GetInstanceID()} : ");
@@ -112,16 +109,6 @@ public class Enemy2 : MonoBehaviour
 
     private void Update()
     {
-        //if (!GameStateManager.IsPlaying())
-        //{
-        //    animator.speed = 0f;
-        //    return;
-        //}
-        //else
-        //{
-        //    animator.speed = 1f;
-        //}
-
         if (!CanThink)
         {
             animator.speed = 0f;
@@ -233,53 +220,28 @@ public class Enemy2 : MonoBehaviour
         // 3). Attack Timer Updatation
         UpdateAttackTimer();
 
-
-        // 4). HealthBarTimer Updtation 
-        UpdateHealthBarVisibility();
-    }
-
-    private void LateUpdate()
-    {
-        healthBarCanvas.forward = Camera.main.transform.forward;
     }
 
 
-
-
-    public void TakeHit(Vector3 hitDirection, float force)
+    public void TakeHit(HitInfo hit)
     {
-        if (isdead()) return;
+        if (Isdead()) return;
 
         // Hit Aniamtion reaction triggered
         animator.SetTrigger("Hit");
 
-
-        // Health AI system
-        health--;
-        Debug.Log("Enemy Health " + health);
-        healthSlider.value = health;
-        UpdateHealthBar();
-
-        // This is to Show HealthBar on screen when enemy Got hit
-        healthBarCanvas.gameObject.SetActive(true);
-        healthBarTimer = healthBarSetActiveTime;
-
-
-
-        if (health <= 0)
-        {
-            Die();
-            return;
-        }
+        // Inform's EnemyHealth for damage 
+        enemyHealth.TakeDamage((int)hit.Damage);
 
         // To fresh store the hit direction
         rb.linearVelocity = Vector3.zero;
 
         // Enemy KnockBack method
-        rb.AddForce(hitDirection * force, ForceMode.Impulse);
+        rb.AddForce(hit.Direction * hit.Force, ForceMode.Impulse);
 
         // Use to execute timed / paused methods 
         StartCoroutine(HitFlash());
+
 
         isStunned = true;
         StartCoroutine(StunRoutine());
@@ -305,7 +267,7 @@ public class Enemy2 : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (isdead()) return;
+        if (Isdead()) return;
 
         Vector3 direction = (player.position - transform.position).normalized;
 
@@ -343,7 +305,7 @@ public class Enemy2 : MonoBehaviour
     private void AttackPlayer()
     {
 
-        if (isdead()) return;
+        if (Isdead()) return;
 
         if (attackTimer > 0)
         {
@@ -391,7 +353,6 @@ public class Enemy2 : MonoBehaviour
 
         StateChange(EnemyState.Dead);
 
-        healthBarCanvas.gameObject.SetActive(false);
         rb.linearVelocity = Vector3.zero;
         animator.SetTrigger("Death");
 
@@ -399,7 +360,7 @@ public class Enemy2 : MonoBehaviour
 
     }
 
-    private bool isdead()
+    private bool Isdead()
     {
         return currentState == EnemyState.Dead;
     }
@@ -573,42 +534,6 @@ public class Enemy2 : MonoBehaviour
         Gizmos.color = Color.blue;
 
         Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-
-    private void UpdateHealthBar()
-    {
-        healthSlider.value = health;
-
-        float healthPercantage = (float)health / healthSlider.maxValue;
-
-        if (healthPercantage > 0.6f)
-        {
-            healthFill.color = Color.green;
-        }
-        else if (healthPercantage > 0.3f)
-        {
-            healthFill.color = Color.yellow;
-        }
-        else
-        {
-            healthFill.color = Color.red;
-        }
-    }
-
-
-    // To set time or to hide the health bar
-    private void UpdateHealthBarVisibility()
-    {
-        if (!healthBarCanvas.gameObject.activeSelf) return;
-
-        healthBarTimer -= Time.deltaTime;
-
-        if (healthBarTimer <= 0)
-        {
-            healthBarCanvas.gameObject.SetActive(false);
-
-        }
-
     }
 
 }

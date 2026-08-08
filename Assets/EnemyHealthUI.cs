@@ -8,7 +8,7 @@ public class EnemyHealthUI : MonoBehaviour
     [SerializeField] Transform healthBarCanvas;
     [SerializeField] Image healthImage;
     [SerializeField] Slider healthSlider;
-    private float healthVisibleTime = 0.2f;
+    private float healthVisibleTime = 2f;
 
     void Start()
     {
@@ -25,9 +25,9 @@ public class EnemyHealthUI : MonoBehaviour
 
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        healthBarCanvas.forward = Camera.main.transform.position;
+        healthBarCanvas.forward = Camera.main.transform.forward;
     }
 
     private void HideHealthCanvas()

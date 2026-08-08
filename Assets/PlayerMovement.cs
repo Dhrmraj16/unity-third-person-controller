@@ -63,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float attackRadius = 1f;
     bool isAttacking;
     float attackTimer;
+    [SerializeField] private float Damage = 2;
 
     [Header("Player Health")]
     [SerializeField] private int maxhealth = 5;
@@ -447,7 +448,13 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
                     hitDirection.y = 0f;
 
-                    enemyScript.TakeHit(hitDirection, 3f);
+                    HitInfo hitInfo = new HitInfo
+                    {
+                        Direction = hitDirection,
+                        Force = 3f,
+                        Damage = Damage
+                    };
+                    enemyScript.TakeHit(hitInfo);
                 }
 
                 // Camera will shake when player hit enemy
