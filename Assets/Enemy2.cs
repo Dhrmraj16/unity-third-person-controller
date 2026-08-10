@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.UI;
+using System;
 
 public class Enemy2 : MonoBehaviour
 {
@@ -52,19 +53,17 @@ public class Enemy2 : MonoBehaviour
     private EnemyState currentState;
 
     [SerializeField] EnemyState enemyState;
-    private enum EnemyState
-    {
-        Patrol,
-        Chase,
-        Attack,
-        Search,
-        Dead
-    }
 
     [Header("Enemy HealthBar")]
 
     // for Refactoring Enemyhealth
     [SerializeField] EnemyHealth enemyHealth;
+
+
+    // State Event 
+    public event Action<EnemyState> OnStateChanged;
+
+    [SerializeField] EnemyAnimator enemyAnimator;
 
     
 
@@ -94,7 +93,6 @@ public class Enemy2 : MonoBehaviour
 
         currentState = EnemyState.Patrol;
 
-        UpdateAnimatorState();
     }
 
     void OnDisable()
@@ -111,12 +109,11 @@ public class Enemy2 : MonoBehaviour
     {
         if (!CanThink)
         {
-            animator.speed = 0f;
+            enemyAnimator.SetSpeed(0f);
             return;
         }
 
-        
-            animator.speed = 1f;
+        enemyAnimator.SetSpeed(1f);
         
 
         if (isStunned) return;
@@ -228,7 +225,9 @@ public class Enemy2 : MonoBehaviour
         if (Isdead()) return;
 
         // Hit Aniamtion reaction triggered
-        animator.SetTrigger("Hit");
+        //animator.SetTrigger("Hit");
+        enemyAnimator.PlayHit();
+        
 
         // Inform's EnemyHealth for damage 
         enemyHealth.TakeDamage((int)hit.Damage);
@@ -314,7 +313,8 @@ public class Enemy2 : MonoBehaviour
 
         if (isAttacking)
         {
-            animator.SetBool("isAttacking", isAttacking);
+            //animator.SetBool("isAttacking", isAttacking);
+            enemyAnimator.SetAttacking(isAttacking);
 
             return;
         }
@@ -323,7 +323,8 @@ public class Enemy2 : MonoBehaviour
 
         isAttacking = true;
 
-        animator.SetTrigger("Attack");
+        //animator.SetTrigger("Attack");
+        enemyAnimator.PlayAttack();
 
         Invoke(nameof(DealDamage), 0.5f);
 
@@ -343,7 +344,8 @@ public class Enemy2 : MonoBehaviour
         }
 
         isAttacking = false;
-        animator.SetBool("isAttacking", isAttacking);
+        //animator.SetBool("isAttacking", isAttacking);
+        enemyAnimator.SetAttacking(isAttacking);
     }
 
 
@@ -354,7 +356,8 @@ public class Enemy2 : MonoBehaviour
         StateChange(EnemyState.Dead);
 
         rb.linearVelocity = Vector3.zero;
-        animator.SetTrigger("Death");
+        //animator.SetTrigger("Death");
+        enemyAnimator.PlayDeath();
 
         StartCoroutine(DeathRoutine());
 
@@ -424,7 +427,8 @@ public class Enemy2 : MonoBehaviour
 
         Debug.Log("Current state changed to : " + currentState);
 
-        UpdateAnimatorState();
+        OnStateChanged?.Invoke(currentState);
+
     }
 
     private bool CanSeePlayer()
@@ -477,51 +481,6 @@ public class Enemy2 : MonoBehaviour
 
 
     }
-
-
-
-    private void UpdateAnimatorState()
-    {
-        switch (currentState)
-        {
-            case EnemyState.Patrol:
-
-                animator.SetBool("isWalking", true);
-                animator.SetBool("isRunning", false);
-
-                break;
-
-            case EnemyState.Chase:
-
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isRunning", true);
-
-                break;
-
-            case EnemyState.Search:
-
-                animator.SetBool("isWalking", true);
-                animator.SetBool("isRunning", false);
-
-                break;
-
-            case EnemyState.Attack:
-
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isRunning", false);
-
-                break;
-
-            case EnemyState.Dead:
-
-                animator.SetBool("isWalking", false);
-                animator.SetBool("isRunning", false);
-
-                break;
-        }
-
-    }
-
 
     void OnDrawGizmosSelected()
     {

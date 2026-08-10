@@ -6,19 +6,19 @@ public class PlayerStateListener : MonoBehaviour
     
     void OnEnable()
     {
-        GameStateManager.OnGameStateChanged += HandlePlayerStateChanged;
+        GameStateManager.OnGameStateChanged += HandleGameStateChanged;
     }
     void OnDisable()
     {
-        GameStateManager.OnGameStateChanged -= HandlePlayerStateChanged;
+        GameStateManager.OnGameStateChanged -= HandleGameStateChanged;
     }
 
     void Start()
     {
         Debug.Log("[PlayerStateListener] Start called :");
-        HandlePlayerStateChanged(GameStateManager.currentState);
+        HandleGameStateChanged(GameStateManager.currentState);
     }
-    void HandlePlayerStateChanged(GameState state)
+    void HandleGameStateChanged(GameState state)
     {
         bool enableControls = state == GameState.Playing;
 
