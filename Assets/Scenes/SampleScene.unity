@@ -293,6 +293,7 @@ MonoBehaviour:
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1796398317}
+  enemyAnimator: {fileID: 0}
 --- !u!95 &9307813
 Animator:
   serializedVersion: 7
@@ -4657,6 +4658,7 @@ MonoBehaviour:
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1796398317}
+  enemyAnimator: {fileID: 1796398318}
 --- !u!54 &1796398310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5337,6 +5339,7 @@ MonoBehaviour:
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1946060779}
+  enemyAnimator: {fileID: 1946060789}
 --- !u!54 &1946060784
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.UI;
 using System;
 
-public class Enemy2 : MonoBehaviour
+public class Enemy2 : MonoBehaviour, IDamageable
 {
     Rigidbody rb;
 
@@ -15,9 +15,6 @@ public class Enemy2 : MonoBehaviour
 
     private Color originalColor;
 
-    // Animator
-    private Animator animator;
-    private bool isAttacking;
 
     [Header("Player Chase")]
 
@@ -28,6 +25,7 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float stopDistance = 1f;
 
     [Header("Enemy Attack")]
+    private bool isAttacking;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private float attackCooldown = 1.5f;
     private float attackTimer;
@@ -63,7 +61,10 @@ public class Enemy2 : MonoBehaviour
     // State Event 
     public event Action<EnemyState> OnStateChanged;
 
+    // Animator connection to enemy Object
     [SerializeField] EnemyAnimator enemyAnimator;
+
+
 
     
 
@@ -72,7 +73,6 @@ public class Enemy2 : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        animator = GetComponent<Animator>();
         Debug.Log($"Enemy Awake >>>>>>>>>>> {GetInstanceID()} : ");
     }
 
@@ -225,7 +225,6 @@ public class Enemy2 : MonoBehaviour
         if (Isdead()) return;
 
         // Hit Aniamtion reaction triggered
-        //animator.SetTrigger("Hit");
         enemyAnimator.PlayHit();
         
 
@@ -313,9 +312,7 @@ public class Enemy2 : MonoBehaviour
 
         if (isAttacking)
         {
-            //animator.SetBool("isAttacking", isAttacking);
             enemyAnimator.SetAttacking(isAttacking);
-
             return;
         }
 
@@ -323,7 +320,6 @@ public class Enemy2 : MonoBehaviour
 
         isAttacking = true;
 
-        //animator.SetTrigger("Attack");
         enemyAnimator.PlayAttack();
 
         Invoke(nameof(DealDamage), 0.5f);
@@ -344,7 +340,6 @@ public class Enemy2 : MonoBehaviour
         }
 
         isAttacking = false;
-        //animator.SetBool("isAttacking", isAttacking);
         enemyAnimator.SetAttacking(isAttacking);
     }
 

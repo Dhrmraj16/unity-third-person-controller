@@ -439,23 +439,34 @@ public class PlayerMovement : MonoBehaviour
             if (enemy.CompareTag("Enemy"))
             {
                 Debug.Log("----Enemy Got Hit----");
-                //Destroy(enemy.gameObject);       
+
+                Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
+                hitDirection.y = 0f;
+                HitInfo hitInfo = new HitInfo
+                {
+                    Direction = hitDirection,
+                    Force = 3f,
+                    Damage = Damage
+                };
+                DamageSystem.ApplyHit(enemy.gameObject, hitInfo);
                 Enemy2 enemyScript = enemy.GetComponent<Enemy2>();
 
-                if (enemyScript != null)
-                {
-                    // Enemy KnockBack Direction
-                    Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
-                    hitDirection.y = 0f;
+                //if (enemyScript != null)
+                //{
+                //    // Enemy KnockBack Direction
+                //    Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
+                //    hitDirection.y = 0f;
 
-                    HitInfo hitInfo = new HitInfo
-                    {
-                        Direction = hitDirection,
-                        Force = 3f,
-                        Damage = Damage
-                    };
-                    enemyScript.TakeHit(hitInfo);
-                }
+                //    HitInfo hitInfo = new HitInfo
+                //    {
+                //        Direction = hitDirection,
+                //        Force = 3f,
+                //        Damage = Damage
+                //    };
+                //    enemyScript.TakeHit(hitInfo);
+                //}
+
+
 
                 // Camera will shake when player hit enemy
                 cameraShakeReff.ShakeTimerUpdate();

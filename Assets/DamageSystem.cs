@@ -21,4 +21,14 @@ public class DamageSystem : MonoBehaviour
         OnDamageAttempt = null;
         OnDamageApplied = null;
     }
+
+    public static void ApplyHit(GameObject target, HitInfo hitinfo)
+    {
+        IDamageable damagaable = target.GetComponent<IDamageable>();
+
+        if (damagaable != null)
+        {
+            damagaable.TakeHit(hitinfo);
+        }
+    }
 }
