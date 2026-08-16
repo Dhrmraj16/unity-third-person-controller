@@ -26,7 +26,6 @@ public class PauseMenu : MonoBehaviour
     {
         gameObject.SetActive(false);
         GameEventManager.ResetState();
-        DamageSystem.ResetState();
         GameStateManager.SetState(GameState.Playing);
         Debug.Log("[PauseMenu] Scene Loaded and Game Restarted : ");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

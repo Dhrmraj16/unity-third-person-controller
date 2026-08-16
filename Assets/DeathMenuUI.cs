@@ -30,8 +30,6 @@ public class DeathMenuUI : MonoBehaviour
 
         GameEventManager.ResetState();
 
-        DamageSystem.ResetState();
-
         Debug.Log("Before Load Scene-----------------1---------------------");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("After Load Scene-----------------2---------------------");

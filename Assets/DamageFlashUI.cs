@@ -11,12 +11,12 @@ public class DamageFlashUI : MonoBehaviour
 
     void OnEnable()
     {
-        DamageSystem.OnDamageApplied += TriggerFlash;
+        //DamageSystem.OnDamageApplied += TriggerFlash;
     }
 
     void OnDisable()
     {
-        DamageSystem.OnDamageApplied -= TriggerFlash;
+        //DamageSystem.OnDamageApplied -= TriggerFlash;
     }
 
     void TriggerFlash(HitInfo hitinfo)

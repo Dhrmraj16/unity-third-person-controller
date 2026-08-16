@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
             Direction = transform.position,
             Damage = AttackAmount
         };
-        DamageSystem.DamageAttempt(hitInfo);
+        //DamageSystem.DamageAttempt(hitInfo);
 
     }
 }

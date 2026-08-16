@@ -14,7 +14,6 @@ public class DeathMenu : MonoBehaviour
         gameObject.SetActive(false);
         GameStateManager.SetState(GameState.Playing);
         GameEventManager.ResetState();
-        DamageSystem.ResetState();
         Debug.Log("[DeathMenu] Scene Loaded and Game Restarted : ");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
