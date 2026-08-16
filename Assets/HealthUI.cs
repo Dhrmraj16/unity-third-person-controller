@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class HealthUI : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-
+    [SerializeField] private Slider playerHealthSlider;
     private void OnEnable()
     {
         PlayerHealth.OnHealthChanged += UpdateHealth;
@@ -17,6 +17,23 @@ public class HealthUI : MonoBehaviour
 
     void UpdateHealth(int current, int max)
     {
-        fillImage.fillAmount = (float)current / max;
+        playerHealthSlider.maxValue = max;
+        playerHealthSlider.value = current;
+
+        float healthParcentage = (float)current / max;
+
+        if (healthParcentage > 0.6)
+        {
+            fillImage.color = Color.green;
+        }
+        else if (healthParcentage > 0.3)
+        {
+            fillImage.color = Color.yellow;
+        }
+        else
+        {
+            fillImage.color = Color.red;
+        }
+
     }
 }

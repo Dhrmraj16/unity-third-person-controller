@@ -2,7 +2,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     // Health Variable's And Field
     [SerializeField] private int maxHealth = 100;
@@ -66,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
         if (!GameStateManager.IsPlaying()) return;
         HandleInvincibilityTimer();
     }
-    void AttemptedDamage(int amount, Vector3 hitSourcePosition)
+    void AttemptedDamage(HitInfo hitInfo)
     {
             Debug.Log($"[PlayerHealth] AttemptedDamage called before condition Invincibility is {isInvincible} :");
         //if (isInvincible) return;
@@ -79,14 +79,15 @@ public class PlayerHealth : MonoBehaviour
         }
         if (GameStateManager.IsDead()) return;
         Debug.Log("[PlayerHealth] DamageApplied Event Invoked :");
-        DamageSystem.ApplyDamage(amount, hitSourcePosition);
+        DamageSystem.ApplyDamage(hitInfo);
+
     }
-    void TakeDamage(int amount, Vector3 hitSourcePosition)
+    void TakeDamage(HitInfo hitInfo)
     {
         Debug.Log("[PlayerHealth] TakeDamage Called :");
         Debug.Log($"[PlayerHealth] isInvincibility is {isInvincible}");
         
-        int finalDamage = Mathf.Max(amount - armor, 1);
+        int finalDamage = Mathf.Max((int)hitInfo.Damage - armor, 1);
 
         CurrentHealth -= finalDamage;
 
@@ -113,9 +114,55 @@ public class PlayerHealth : MonoBehaviour
         PlayerMovement movement = GetComponent<PlayerMovement>();
         if (movement != null)
         {
-            movement.ApplyKnockback(hitSourcePosition);
+            movement.ApplyKnockback(hitInfo.Direction);
         }
         
+    }
+
+    public void TakeHit(HitInfo hitInfo)
+    {
+        Debug.Log($"[PlayerHealth] TakeHit called before condition Invincibility is {isInvincible} :");
+        //if (isInvincible) return;
+        if (isInvincible)
+        {
+            Debug.Log($"[PlayerHealth] Invincibility is {isInvincible} So cannot Attack Now");
+            Debug.Log($"[PlayerHealth] Invincibility TImer Value is {invincibilityTimer}");
+            return;
+
+        }
+        if (GameStateManager.IsDead()) return;
+        Debug.Log("[PlayerHealth] TakeHit Validated :");
+
+        int finalDamage = Mathf.Max((int)hitInfo.Damage - armor, 1);
+
+        CurrentHealth -= finalDamage;
+
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+
+        Debug.Log("[PlayerHealth] OnHealthChanged Event Invoked :");
+        OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+
+
+        if (CurrentHealth <= 0)
+        {
+            Debug.Log("Player is Dead : ");
+            GameStateManager.Die();
+
+            return;
+        }
+
+        FlashHit();
+
+        StartInvincibility();
+
+        Debug.Log($"[PlayerHealth's] CurrentHealth Reduced to {CurrentHealth}");
+
+        PlayerMovement movement = GetComponent<PlayerMovement>();
+        if (movement != null)
+        {
+            movement.ApplyKnockback(hitInfo.SourcePosition);
+        }
+
     }
 
     void StartInvincibility()

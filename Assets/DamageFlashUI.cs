@@ -19,7 +19,7 @@ public class DamageFlashUI : MonoBehaviour
         DamageSystem.OnDamageApplied -= TriggerFlash;
     }
 
-    void TriggerFlash(int amount, Vector3 hitSourcePosition)
+    void TriggerFlash(HitInfo hitinfo)
     {
         if(flashRoutine != null)
             StopCoroutine(flashRoutine);

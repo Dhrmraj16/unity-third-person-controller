@@ -58,7 +58,12 @@ public class Enemy : MonoBehaviour
         if (GameStateManager.currentState != GameState.Playing) return;
         Debug.Log($"[Enemy] Attacked With amount {AttackAmount}");
         //GameEventManager.RaiseOnDamage(AttackAmount);
-        DamageSystem.DamageAttempt(AttackAmount,transform.position);
+        HitInfo hitInfo = new HitInfo()
+        {
+            Direction = transform.position,
+            Damage = AttackAmount
+        };
+        DamageSystem.DamageAttempt(hitInfo);
 
     }
 }

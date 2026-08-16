@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class DamageSystem : MonoBehaviour
 {
-    public static event Action<int, Vector3> OnDamageAttempt;
-    public static event Action<int , Vector3 > OnDamageApplied;
+    public static event Action<HitInfo> OnDamageAttempt;
+    public static event Action<HitInfo> OnDamageApplied;
 
-    public static void ApplyDamage(int amount, Vector3 sourcePosition)
+    public static void ApplyDamage(HitInfo hitinfo)
     {
-        OnDamageApplied?.Invoke(amount, sourcePosition);
+        OnDamageApplied?.Invoke(hitinfo);
     }
 
-    public static void DamageAttempt(int amount, Vector3 sourcePosition)
+    public static void DamageAttempt(HitInfo hitinfo)
     {
-        OnDamageAttempt?.Invoke(amount, sourcePosition);
+        OnDamageAttempt?.Invoke(hitinfo);
     }
 
     public static void ResetState()

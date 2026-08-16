@@ -1,6 +1,5 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -65,27 +64,8 @@ public class PlayerMovement : MonoBehaviour
     float attackTimer;
     [SerializeField] private float Damage = 2;
 
-    [Header("Player Health")]
-    [SerializeField] private int maxhealth = 5;
-    private int currentHealth;
-
-    [SerializeField] private Slider playerHealthSlider;
-    [SerializeField] private Image healhtFill;
-
     // CamerShake 
     CameraShake cameraShakeReff;
-
-
-    void Start()
-    {
-        currentHealth = maxhealth;
-
-        playerHealthSlider.minValue = 0f;
-        playerHealthSlider.maxValue = maxhealth;
-
-        UpdateHealthUI();
-    }
-
     void Awake()
     {
         // For character control access
@@ -440,33 +420,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("----Enemy Got Hit----");
 
+                // Enemy knockBack direction
                 Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
                 hitDirection.y = 0f;
+
+                // Data Packet required for apply hit
                 HitInfo hitInfo = new HitInfo
                 {
                     Direction = hitDirection,
                     Force = 3f,
                     Damage = Damage
                 };
+
                 DamageSystem.ApplyHit(enemy.gameObject, hitInfo);
-                Enemy2 enemyScript = enemy.GetComponent<Enemy2>();
-
-                //if (enemyScript != null)
-                //{
-                //    // Enemy KnockBack Direction
-                //    Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
-                //    hitDirection.y = 0f;
-
-                //    HitInfo hitInfo = new HitInfo
-                //    {
-                //        Direction = hitDirection,
-                //        Force = 3f,
-                //        Damage = Damage
-                //    };
-                //    enemyScript.TakeHit(hitInfo);
-                //}
-
-
 
                 // Camera will shake when player hit enemy
                 cameraShakeReff.ShakeTimerUpdate();
@@ -481,42 +447,6 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.red;
 
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
-    }
-
-    public void TakeDamage(int damage, Vector3 SourcePosition)
-    {
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            UpdateHealthUI();
-
-            GameStateManager.Die(); 
-            return;
-        }
-
-        UpdateHealthUI();
-        DamageSystem.ApplyDamage(damage, SourcePosition);
-        currentHealth -= damage;
-        Debug.Log("-- PLayer health " + currentHealth);
-        ApplyKnockback(SourcePosition);
-    }
-
-    private void UpdateHealthUI()
-    {
-        playerHealthSlider.value = currentHealth;
-
-        float healthPercant = (float)currentHealth / playerHealthSlider.maxValue;
-
-        if (healthPercant > 0.6f)
-        {
-            healhtFill.color = Color.green;
-        } else if (healthPercant > 0.3f)
-        {
-            healhtFill.color = Color.yellow;
-        } else
-        {
-            healhtFill.color = Color.red;
-        }
     }
 
 }

@@ -331,14 +331,14 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     private void DealDamage()
     {
-        PlayerMovement playerMovement =
-            player.GetComponent<PlayerMovement>();
-
-        if (playerMovement != null)
+        HitInfo hitInfo = new HitInfo()
         {
-            playerMovement.TakeDamage(1, transform.position);
-        }
-
+            SourcePosition = transform.position,
+            Damage = 1
+        };
+        Debug.Log("Enemy2 DamageAttempted :--------------------------");
+        //DamageSystem.DamageAttempt(hitInfo);
+        DamageSystem.ApplyHit(player.gameObject, hitInfo);
         isAttacking = false;
         enemyAnimator.SetAttacking(isAttacking);
     }
