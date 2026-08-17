@@ -87,8 +87,10 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\CameraPivotLook.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
+    <Compile Include="Assets\Enemy Script sepration\EnemyKnockBack.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\Enemy Script sepration\Enemy State.cs" />
+    <Compile Include="Assets\Enemy Script sepration\Enemy Detection.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\DeathMenu.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />

@@ -420,16 +420,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("----Enemy Got Hit----");
 
-                // Enemy knockBack direction
-                Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
-                hitDirection.y = 0f;
-
                 // Data Packet required for apply hit
                 HitInfo hitInfo = new HitInfo
                 {
-                    Direction = hitDirection,
                     Force = 3f,
-                    Damage = Damage
+                    Damage = Damage,
+                    SourcePosition = transform.position,
                 };
 
                 DamageSystem.ApplyHit(enemy.gameObject, hitInfo);

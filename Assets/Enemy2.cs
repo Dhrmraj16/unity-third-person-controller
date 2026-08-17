@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Data;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.UI;
-using System;
 
 public class Enemy2 : MonoBehaviour, IDamageable
 {
@@ -36,6 +37,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
     private Transform currentTarget;
 
     [Header("Detection")]
+    [SerializeField] EnemyDetection enemyDetection;
     [SerializeField] private float detectionRange = 5f;
     [SerializeField] private float visionAngle = 60f;
     private Vector3 lastKnownPlayerPosition;
@@ -63,6 +65,9 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     // Animator connection to enemy Object
     [SerializeField] EnemyAnimator enemyAnimator;
+
+    [Header("KnockBack")]
+    [SerializeField] EnemyKnockBack enemyKnockBack;
 
 
 
@@ -219,7 +224,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     }
 
-
+    // Enemy-level reaction orchestrator
     public void TakeHit(HitInfo hit)
     {
         if (Isdead()) return;
@@ -234,8 +239,13 @@ public class Enemy2 : MonoBehaviour, IDamageable
         // To fresh store the hit direction
         rb.linearVelocity = Vector3.zero;
 
-        // Enemy KnockBack method
-        rb.AddForce(hit.Direction * hit.Force, ForceMode.Impulse);
+        //// Enemy KnockBack method
+        //Vector3 Direction = transform.position - hit.SourcePosition;
+        //Direction.y = 0f;
+        //Direction.Normalize();
+
+        //rb.AddForce(Direction * hit.Force, ForceMode.Impulse);
+        enemyKnockBack.ApplyKnockBack(hit);
 
         // Use to execute timed / paused methods 
         StartCoroutine(HitFlash());
@@ -243,6 +253,18 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         isStunned = true;
         StartCoroutine(StunRoutine());
+    }
+
+
+    // Enemy KnockBack method
+    public void ApplyKnockBack(HitInfo hit)
+    {
+
+        Vector3 Direction = transform.position - hit.SourcePosition;
+        Direction.y = 0f;
+        Direction.Normalize();
+
+        rb.AddForce(Direction * hit.Force, ForceMode.Impulse);
     }
 
     private IEnumerator StunRoutine()
