@@ -38,9 +38,6 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     [Header("Detection")]
     [SerializeField] EnemyDetection enemyDetection;
-    [SerializeField] private float detectionRange = 5f;
-    [SerializeField] private float visionAngle = 60f;
-    private Vector3 lastKnownPlayerPosition;
 
     private bool reachedSearchPosition;
 
@@ -71,7 +68,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
 
 
-    
+
 
 
     void Awake()
@@ -119,7 +116,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
         }
 
         enemyAnimator.SetSpeed(1f);
-        
+
 
         if (isStunned) return;
 
@@ -131,7 +128,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
 
         // 1). To give location memory to the enemy detection system 
-        UpdateLastKnownPlayerPosition();
+        enemyDetection.UpdateLastKnownPlayerPosition();
 
 
 
@@ -139,7 +136,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
         switch (currentState)
         {
             case EnemyState.Patrol:
-                if (CanDetectPlayer())
+                if (enemyDetection.CanDetectPlayer())
                 {
                     StateChange(EnemyState.Chase);
 
@@ -152,7 +149,15 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
             case EnemyState.Chase:
 
-                if (!CanDetectPlayer())
+                float distanceToPlayer = GetDistanceToPlayer();
+                Debug.Log($"In chase State distance to player is {distanceToPlayer} and attack range is {attackRange}");
+
+                if (distanceToPlayer <= attackRange) 
+                {
+                    Debug.Log("Enemy state now chaged from chase to attack ");
+                    StateChange(EnemyState.Attack);
+
+                } else if (!enemyDetection.CanDetectPlayer() )
                 {
 
                     reachedSearchPosition = false;
@@ -184,7 +189,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
             case EnemyState.Search:
 
-                if (CanDetectPlayer())
+                if (enemyDetection.CanDetectPlayer())
                 {
                     StateChange(EnemyState.Chase);
                     break;
@@ -231,18 +236,13 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         // Hit Aniamtion reaction triggered
         enemyAnimator.PlayHit();
-        
+
 
         // Inform's EnemyHealth for damage 
         enemyHealth.TakeDamage((int)hit.Damage);
 
         // To fresh store the hit direction
         rb.linearVelocity = Vector3.zero;
-
-        //// Enemy KnockBack method
-        //Vector3 Direction = transform.position - hit.SourcePosition;
-        //Direction.y = 0f;
-        //Direction.Normalize();
 
         //rb.AddForce(Direction * hit.Force, ForceMode.Impulse);
         enemyKnockBack.ApplyKnockBack(hit);
@@ -289,7 +289,10 @@ public class Enemy2 : MonoBehaviour, IDamageable
     {
         if (Isdead()) return;
 
-        Vector3 direction = (player.position - transform.position).normalized;
+        Vector3 direction = (player.position - transform.position);
+        direction.y = 0f;
+
+        direction.Normalize();
 
         // To stop the enemy to collapse at the exact player position
         float distance = Vector3.Distance(transform.position, player.position);
@@ -302,19 +305,12 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         }
 
-        direction.y = 0;
-
         // To look in the direction of Player
         if (direction != Vector3.zero)
         {
             transform.forward = direction;
         }
 
-        if (distance <= attackRange)
-        {
-            StateChange(EnemyState.Attack);
-            return;
-        } 
     }
 
     private void UpdateAttackTimer()
@@ -324,7 +320,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     private void AttackPlayer()
     {
-
+        Debug.Log("Attack player method called");
         if (Isdead()) return;
 
         if (attackTimer > 0)
@@ -396,7 +392,9 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     private void Patrol()
     {
-        Vector3 direction = (currentTarget.position - transform.position).normalized;
+        Vector3 direction = (currentTarget.position - transform.position);
+        direction.y = 0f;
+        direction.Normalize();
 
         transform.position += direction * moveSpeed * Time.deltaTime;
 
@@ -421,19 +419,15 @@ public class Enemy2 : MonoBehaviour, IDamageable
         }
     }
 
-    private bool CanDetectPlayer()
-    {
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        return (distance <= detectionRange && CanSeePlayer());
-
-    }
-
 
     // Returns distance between Enemy and Player
     private float GetDistanceToPlayer()
     {
-        return Vector3.Distance(transform.position, player.position);
+        Vector3 offset = transform.position - player.position;
+        offset.y = 0f;
+
+        float distanceToPlayer = offset.magnitude;
+        return distanceToPlayer;
     }
 
     private void StateChange(EnemyState newState)
@@ -448,33 +442,10 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     }
 
-    private bool CanSeePlayer()
-    {
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-
-        float dot = Vector3.Dot(transform.forward, directionToPlayer);
-
-        float visionThreshold = Mathf.Cos(visionAngle * 0.5f * Mathf.Deg2Rad);
-
-        Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
-        Debug.DrawRay(transform.position, directionToPlayer * 3, Color.red);
-        return dot >= visionThreshold;
-    }
-
-    private void UpdateLastKnownPlayerPosition()
-    {
-        if (CanDetectPlayer())
-        {
-            lastKnownPlayerPosition = player.position;
-
-        }
-
-    }
-
     private void Search()
     {
 
-        Vector3 direction = lastKnownPlayerPosition - transform.position;
+        Vector3 direction = enemyDetection.LastKnownPlayerPosition - transform.position;
 
         direction.y = 0f;
 
@@ -483,7 +454,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
         transform.position += direction * moveSpeed * Time.deltaTime;
 
         Vector3 FlatEnemyPos = transform.position;
-        Vector3 FlatTargetPos = lastKnownPlayerPosition;
+        Vector3 FlatTargetPos = enemyDetection.LastKnownPlayerPosition;
 
         FlatEnemyPos.y = 0f;
         FlatTargetPos.y = 0f;

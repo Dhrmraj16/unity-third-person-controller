@@ -287,13 +287,13 @@ MonoBehaviour:
   attackCooldown: 3
   pointA: {fileID: 209212083}
   pointB: {fileID: 1970442876}
-  detectionRange: 10
-  visionAngle: 140
+  enemyDetection: {fileID: 0}
   SearchWaitTime: 2
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1796398317}
   enemyAnimator: {fileID: 0}
+  enemyKnockBack: {fileID: 0}
 --- !u!95 &9307813
 Animator:
   serializedVersion: 7
@@ -4591,6 +4591,8 @@ GameObject:
   - component: {fileID: 1796398316}
   - component: {fileID: 1796398317}
   - component: {fileID: 1796398318}
+  - component: {fileID: 1796398319}
+  - component: {fileID: 1796398320}
   m_Layer: 0
   m_Name: EnemyA
   m_TagString: Enemy
@@ -4635,18 +4637,18 @@ MonoBehaviour:
   enemyRenderer: {fileID: 1796398312}
   player: {fileID: 764560159}
   moveSpeed: 2
-  stopDistance: 0.8
-  attackRange: 1.5
+  stopDistance: 1
+  attackRange: 1.2
   attackCooldown: 3
   pointA: {fileID: 1726995929}
   pointB: {fileID: 759116151}
-  detectionRange: 10
-  visionAngle: 140
+  enemyDetection: {fileID: 1796398320}
   SearchWaitTime: 2
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1796398317}
   enemyAnimator: {fileID: 1796398318}
+  enemyKnockBack: {fileID: 1796398319}
 --- !u!54 &1796398310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4826,6 +4828,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08e3957e90f2a04a8c4212b747699a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
+--- !u!114 &1796398319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796398307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b538ba9938b76ae49b976dbd8b44ca8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyKnockBack
+--- !u!114 &1796398320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796398307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a6e47beec6c9449917102eafd0b2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
+  player: {fileID: 764560159}
+  detectionRange: 5
+  visionAngle: 60
+  dot: 0
+  visionThreshold: 0
 --- !u!1 &1812809710
 GameObject:
   m_ObjectHideFlags: 0
@@ -5265,6 +5296,8 @@ GameObject:
   - component: {fileID: 1946060780}
   - component: {fileID: 1946060779}
   - component: {fileID: 1946060789}
+  - component: {fileID: 1946060790}
+  - component: {fileID: 1946060791}
   m_Layer: 0
   m_Name: EnemyB
   m_TagString: Enemy
@@ -5355,15 +5388,15 @@ MonoBehaviour:
   stopDistance: 0.8
   attackRange: 1.5
   attackCooldown: 3
-  pointA: {fileID: 1726995929}
-  pointB: {fileID: 759116151}
-  detectionRange: 10
-  visionAngle: 140
+  pointA: {fileID: 209212083}
+  pointB: {fileID: 1970442876}
+  enemyDetection: {fileID: 1946060791}
   SearchWaitTime: 2
   stunDuration: 1
   enemyState: 0
   enemyHealth: {fileID: 1946060779}
   enemyAnimator: {fileID: 1946060789}
+  enemyKnockBack: {fileID: 1946060790}
 --- !u!54 &1946060784
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5500,6 +5533,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08e3957e90f2a04a8c4212b747699a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
+--- !u!114 &1946060790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946060778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b538ba9938b76ae49b976dbd8b44ca8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyKnockBack
+--- !u!114 &1946060791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946060778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a6e47beec6c9449917102eafd0b2b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
+  player: {fileID: 764560159}
+  detectionRange: 5
+  visionAngle: 90
+  dot: 0
+  visionThreshold: 0
 --- !u!1 &1970442875
 GameObject:
   m_ObjectHideFlags: 0
