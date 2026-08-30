@@ -74,6 +74,7 @@
     <Compile Include="Assets\CameraShake.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\DamageFlashUI.cs" />
+    <Compile Include="Assets\Enemy Script sepration\Enemy Attack.cs" />
     <Compile Include="Assets\EnemyStateListener.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />

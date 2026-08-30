@@ -283,8 +283,8 @@ MonoBehaviour:
   player: {fileID: 764560159}
   moveSpeed: 2
   stopDistance: 0.8
+  enemyAttack: {fileID: 0}
   attackRange: 1.5
-  attackCooldown: 3
   pointA: {fileID: 209212083}
   pointB: {fileID: 1970442876}
   enemyDetection: {fileID: 0}
@@ -4593,6 +4593,7 @@ GameObject:
   - component: {fileID: 1796398318}
   - component: {fileID: 1796398319}
   - component: {fileID: 1796398320}
+  - component: {fileID: 1796398321}
   m_Layer: 0
   m_Name: EnemyA
   m_TagString: Enemy
@@ -4638,8 +4639,8 @@ MonoBehaviour:
   player: {fileID: 764560159}
   moveSpeed: 2
   stopDistance: 1
+  enemyAttack: {fileID: 1796398321}
   attackRange: 1.2
-  attackCooldown: 3
   pointA: {fileID: 1726995929}
   pointB: {fileID: 759116151}
   enemyDetection: {fileID: 1796398320}
@@ -4855,8 +4856,21 @@ MonoBehaviour:
   player: {fileID: 764560159}
   detectionRange: 5
   visionAngle: 60
-  dot: 0
-  visionThreshold: 0
+--- !u!114 &1796398321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796398307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d9339c959f164849bf21174023ccd99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
+  attackCooldown: 1.5
+  player: {fileID: 764560157}
+  enemyAnimator: {fileID: 1796398318}
 --- !u!1 &1812809710
 GameObject:
   m_ObjectHideFlags: 0
@@ -5386,8 +5400,8 @@ MonoBehaviour:
   player: {fileID: 764560159}
   moveSpeed: 2
   stopDistance: 0.8
-  attackRange: 1.5
-  attackCooldown: 3
+  enemyAttack: {fileID: 0}
+  attackRange: 1.2
   pointA: {fileID: 209212083}
   pointB: {fileID: 1970442876}
   enemyDetection: {fileID: 1946060791}
@@ -5559,9 +5573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
   player: {fileID: 764560159}
   detectionRange: 5
-  visionAngle: 90
-  dot: 0
-  visionThreshold: 0
+  visionAngle: 60
 --- !u!1 &1970442875
 GameObject:
   m_ObjectHideFlags: 0

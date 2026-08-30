@@ -60,6 +60,7 @@ public class EnemyAnimator : MonoBehaviour
 
     public void PlayAttack()
     {
+        Debug.Log("Attack animation triggered");
         animator.SetTrigger("Attack");
     }
 

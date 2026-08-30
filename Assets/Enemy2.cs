@@ -26,9 +26,12 @@ public class Enemy2 : MonoBehaviour, IDamageable
     [SerializeField] private float stopDistance = 1f;
 
     [Header("Enemy Attack")]
-    private bool isAttacking;
+
+    [SerializeField] private EnemyAttack enemyAttack;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private float attackCooldown = 1.5f;
+
+    private bool isAttacking;
     private float attackTimer;
 
     [Header("Patrol")]
@@ -65,11 +68,6 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     [Header("KnockBack")]
     [SerializeField] EnemyKnockBack enemyKnockBack;
-
-
-
-
-
 
     void Awake()
     {
@@ -183,7 +181,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
                 }
                 else
                 {
-                    AttackPlayer();
+                    enemyAttack.AttackPlayer();
                 }
                 break;
 
@@ -225,7 +223,8 @@ public class Enemy2 : MonoBehaviour, IDamageable
         }
 
         // 3). Attack Timer Updatation
-        UpdateAttackTimer();
+        enemyAttack.UpdateAttackTimer();
+        //UpdateAttackTimer();
 
     }
 
@@ -313,53 +312,53 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     }
 
-    private void UpdateAttackTimer()
-    {
-        attackTimer -= Time.deltaTime;
-    }
+    //private void UpdateAttackTimer()
+    //{
+    //    attackTimer -= Time.deltaTime;
+    //}
 
-    private void AttackPlayer()
-    {
-        Debug.Log("Attack player method called");
-        if (Isdead()) return;
+    //private void AttackPlayer()
+    //{
+    //    Debug.Log("Attack player method called");
+    //    if (Isdead()) return;
 
-        if (attackTimer > 0)
-        {
-            return;
-        }
+    //    if (attackTimer > 0)
+    //    {
+    //        return;
+    //    }
 
-        if (isAttacking)
-        {
-            enemyAnimator.SetAttacking(isAttacking);
-            return;
-        }
-
-
-
-        isAttacking = true;
-
-        enemyAnimator.PlayAttack();
-
-        Invoke(nameof(DealDamage), 0.5f);
-
-        attackTimer = attackCooldown;
+    //    if (isAttacking)
+    //    {
+    //        enemyAnimator.SetAttacking(isAttacking); 
+    //        return;
+    //    }
 
 
-    }
 
-    private void DealDamage()
-    {
-        HitInfo hitInfo = new HitInfo()
-        {
-            SourcePosition = transform.position,
-            Damage = 1
-        };
-        Debug.Log("Enemy2 DamageAttempted :--------------------------");
-        //DamageSystem.DamageAttempt(hitInfo);
-        DamageSystem.ApplyHit(player.gameObject, hitInfo);
-        isAttacking = false;
-        enemyAnimator.SetAttacking(isAttacking);
-    }
+    //    isAttacking = true;
+
+    //    enemyAnimator.PlayAttack();
+
+    //    Invoke(nameof(DealDamage), 0.5f);
+
+    //    attackTimer = attackCooldown;
+
+
+    //}
+
+    //private void DealDamage()
+    //{
+    //    HitInfo hitInfo = new HitInfo()
+    //    {
+    //        SourcePosition = transform.position,
+    //        Damage = 1
+    //    };
+    //    Debug.Log("Enemy2 DamageAttempted :--------------------------");
+    //    //DamageSystem.DamageAttempt(hitInfo);
+    //    DamageSystem.ApplyHit(player.gameObject, hitInfo);
+    //    isAttacking = false;
+    //    enemyAnimator.SetAttacking(isAttacking);
+    //}
 
 
 
