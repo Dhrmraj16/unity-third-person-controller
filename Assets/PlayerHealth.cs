@@ -18,7 +18,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     // Flash While Taking Damage
     [SerializeField] private Renderer playerRenderer;
-    [SerializeField] private Color hitColor = Color.red;
+    [SerializeField] private Color hitColor = Color.black;
     [SerializeField] private float hitFlashDuration = 0.2f;
 
     // Armor
@@ -125,6 +125,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     void FlashHit()
     {
+        Debug.Log($"----------------------------HitFlash color of player now changed to black : and playerhealth is {CurrentHealth}");
         playerRenderer.material.color = hitColor;
         Invoke(nameof(ResetColor), hitFlashDuration);
     }

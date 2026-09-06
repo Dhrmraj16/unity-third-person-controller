@@ -2559,9 +2559,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 10
-  invincibilityDuration: 2
+  invincibilityDuration: 0.5
   playerRenderer: {fileID: 586819398}
-  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitColor: {r: 0.10943389, g: 0.08981838, b: 0.08981838, a: 1}
   hitFlashDuration: 0.1
   armor: 8
 --- !u!95 &764560165
@@ -4638,7 +4638,7 @@ MonoBehaviour:
   enemyRenderer: {fileID: 1796398312}
   player: {fileID: 764560159}
   moveSpeed: 2
-  stopDistance: 1
+  stopDistance: 0.8
   enemyAttack: {fileID: 1796398321}
   attackRange: 1.2
   pointA: {fileID: 1726995929}
@@ -4855,7 +4855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetection
   player: {fileID: 764560159}
   detectionRange: 5
-  visionAngle: 60
+  visionAngle: 90
 --- !u!114 &1796398321
 MonoBehaviour:
   m_ObjectHideFlags: 0

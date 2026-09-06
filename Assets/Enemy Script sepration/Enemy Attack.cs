@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
@@ -9,17 +10,20 @@ public class EnemyAttack : MonoBehaviour
 
     private bool isAttacking;
     private float attackTimer;
+    private bool canAttack = true;
 
     [SerializeField] private GameObject player;
     [SerializeField] private EnemyAnimator enemyAnimator;
 
 
-    //private void Update()
-    //{
-    //    Debug.Log($"Enemy Attack Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()}");
+    private void Update()
+    {
+        //Debug.Log($"Enemy Attack Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()}");
+        if (!(GameStateManager.currentState == GameState.Playing)) return;
+        if (!canAttack) return;
 
-    //    UpdateAttackTimer();
-    //}
+        UpdateAttackTimer();
+    }
     public void AttackPlayer()
     {
         Debug.Log("Attack player method called");
@@ -27,6 +31,7 @@ public class EnemyAttack : MonoBehaviour
 
         if (attackTimer > 0)
         {
+        Debug.Log($"Enemy Attack Timer is {attackTimer} so returned-----------");
             return;
         }
 
@@ -40,8 +45,8 @@ public class EnemyAttack : MonoBehaviour
 
         enemyAnimator.PlayAttack();
 
-        Invoke(nameof(DealDamage), 0.5f);
-
+        //Invoke(nameof(DealDamage), 0.5f);
+        DealDamage();
         attackTimer = attackCooldown;
 
 
@@ -62,10 +67,21 @@ public class EnemyAttack : MonoBehaviour
         enemyAnimator.SetAttacking(isAttacking);
     }
 
-    public void UpdateAttackTimer()
+    private void UpdateAttackTimer()
     {
         Debug.Log($"Enemy Attack Timer is {attackTimer}");
         attackTimer -= Time.deltaTime;
     }
 
+    public void SetAttackEnabled(bool value)
+    {
+        canAttack = value;
+    }
+
+    public void CancelAttack()
+    {
+        CancelInvoke(nameof(DealDamage));
+        isAttacking = false;
+        enemyAnimator.SetAttacking(false);
+    }
 }

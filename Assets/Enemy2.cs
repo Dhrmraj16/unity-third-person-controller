@@ -29,10 +29,10 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     [SerializeField] private EnemyAttack enemyAttack;
     [SerializeField] private float attackRange = 1f;
-    [SerializeField] private float attackCooldown = 1.5f;
+    //[SerializeField] private float attackCooldown = 1.5f;
 
-    private bool isAttacking;
-    private float attackTimer;
+    //private bool isAttacking;
+    //private float attackTimer;
 
     [Header("Patrol")]
     [SerializeField] private Transform pointA;
@@ -73,7 +73,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
     {
         rb = GetComponent<Rigidbody>();
 
-        Debug.Log($"Enemy Awake >>>>>>>>>>> {GetInstanceID()} : ");
+        //Debug.Log($"Enemy Awake >>>>>>>>>>> {GetInstanceID()} : ");
     }
 
     void OnEnable()
@@ -84,7 +84,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     void Start()
     {
-        Debug.Log($"Enemy Start >>>>>>>>>>> {GetInstanceID()} : ");
+        //Debug.Log($"Enemy Start >>>>>>>>>>> {GetInstanceID()} : ");
         enemyRenderer = GetComponent<Renderer>();
 
         originalColor = enemyRenderer.material.color;
@@ -118,7 +118,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         if (isStunned) return;
 
-        Debug.Log($"Enemy Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()} | {currentState}");
+        //Debug.Log($"Enemy Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()} | {currentState}");
 
         Debug.Log("Current State of Enenmy is -------------- " + currentState);
         Debug.Log("Current State of Game is ----------------" + GameStateManager.currentState);
@@ -223,7 +223,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
         }
 
         // 3). Attack Timer Updatation
-        enemyAttack.UpdateAttackTimer();
+        //enemyAttack.UpdateAttackTimer();
         //UpdateAttackTimer();
 
     }
@@ -250,6 +250,9 @@ public class Enemy2 : MonoBehaviour, IDamageable
         StartCoroutine(HitFlash());
 
 
+        enemyAttack.SetAttackEnabled(false);
+        enemyAttack.CancelInvoke();
+
         isStunned = true;
         StartCoroutine(StunRoutine());
     }
@@ -271,7 +274,8 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(stunDuration);
 
-        isStunned = false;
+            isStunned = false;
+        enemyAttack.SetAttackEnabled(true);
     }
 
     // Timed / Paused Method 
