@@ -45,11 +45,10 @@ public class EnemyAttack : MonoBehaviour
 
         enemyAnimator.PlayAttack();
 
-        //Invoke(nameof(DealDamage), 0.5f);
-        DealDamage();
+        Invoke(nameof(DealDamage), 0.5f);
+        //DealDamage();
+
         attackTimer = attackCooldown;
-
-
     }
 
     private void DealDamage()
@@ -65,6 +64,8 @@ public class EnemyAttack : MonoBehaviour
 
         isAttacking = false;
         enemyAnimator.SetAttacking(isAttacking);
+        //attackTimer = attackCooldown;
+
     }
 
     private void UpdateAttackTimer()
@@ -76,6 +77,7 @@ public class EnemyAttack : MonoBehaviour
     public void SetAttackEnabled(bool value)
     {
         canAttack = value;
+        Debug.Log("Set attack enabled called and can Attack in enemy attack is " + canAttack);
     }
 
     public void CancelAttack()

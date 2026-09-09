@@ -116,7 +116,10 @@ public class Enemy2 : MonoBehaviour, IDamageable
         enemyAnimator.SetSpeed(1f);
 
 
-        if (isStunned) return;
+        if (isStunned)
+        {
+           return;
+        }
 
         //Debug.Log($"Enemy Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()} | {currentState}");
 
@@ -251,9 +254,10 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
 
         enemyAttack.SetAttackEnabled(false);
-        enemyAttack.CancelInvoke();
+        //enemyAttack.CancelInvoke();
 
         isStunned = true;
+        Debug.Log("Enmey is stunned right now and stunned duration is " + stunDuration);
         StartCoroutine(StunRoutine());
     }
 
@@ -273,7 +277,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
     {
 
         yield return new WaitForSeconds(stunDuration);
-
+        Debug.Log("Stunned duration end here and is stunned is false");
             isStunned = false;
         enemyAttack.SetAttackEnabled(true);
     }
