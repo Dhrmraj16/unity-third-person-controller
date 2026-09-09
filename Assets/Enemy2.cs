@@ -121,8 +121,6 @@ public class Enemy2 : MonoBehaviour, IDamageable
            return;
         }
 
-        //Debug.Log($"Enemy Update Frame : {Time.frameCount} Instance ID : {GetInstanceID()} | {currentState}");
-
         Debug.Log("Current State of Enenmy is -------------- " + currentState);
         Debug.Log("Current State of Game is ----------------" + GameStateManager.currentState);
 
@@ -160,7 +158,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
                 } else if (!enemyDetection.CanDetectPlayer() )
                 {
-
+                    Debug.Log($"Last Know player position after chase is {enemyDetection.LastKnownPlayerPosition}");
                     reachedSearchPosition = false;
 
                     SearchWaitTimer = SearchWaitTime;
@@ -224,10 +222,6 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
 
         }
-
-        // 3). Attack Timer Updatation
-        //enemyAttack.UpdateAttackTimer();
-        //UpdateAttackTimer();
 
     }
 
@@ -320,56 +314,6 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     }
 
-    //private void UpdateAttackTimer()
-    //{
-    //    attackTimer -= Time.deltaTime;
-    //}
-
-    //private void AttackPlayer()
-    //{
-    //    Debug.Log("Attack player method called");
-    //    if (Isdead()) return;
-
-    //    if (attackTimer > 0)
-    //    {
-    //        return;
-    //    }
-
-    //    if (isAttacking)
-    //    {
-    //        enemyAnimator.SetAttacking(isAttacking); 
-    //        return;
-    //    }
-
-
-
-    //    isAttacking = true;
-
-    //    enemyAnimator.PlayAttack();
-
-    //    Invoke(nameof(DealDamage), 0.5f);
-
-    //    attackTimer = attackCooldown;
-
-
-    //}
-
-    //private void DealDamage()
-    //{
-    //    HitInfo hitInfo = new HitInfo()
-    //    {
-    //        SourcePosition = transform.position,
-    //        Damage = 1
-    //    };
-    //    Debug.Log("Enemy2 DamageAttempted :--------------------------");
-    //    //DamageSystem.DamageAttempt(hitInfo);
-    //    DamageSystem.ApplyHit(player.gameObject, hitInfo);
-    //    isAttacking = false;
-    //    enemyAnimator.SetAttacking(isAttacking);
-    //}
-
-
-
     private void Die()
     {
 
@@ -451,6 +395,7 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
     private void Search()
     {
+        Debug.Log($"Enemy position every frame after search starts is {transform.position}");
 
         Vector3 direction = enemyDetection.LastKnownPlayerPosition - transform.position;
 

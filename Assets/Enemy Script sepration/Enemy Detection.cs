@@ -14,6 +14,10 @@ public class EnemyDetection : MonoBehaviour
 
     private float dot;
     private float visionThreshold;
+
+    [Header("Line of Sight")]
+    [SerializeField] private LayerMask obstacleMask;
+
     public bool CanSeePlayer()
     {
         Vector3 directionToPlayer = (player.position - transform.position);
@@ -24,11 +28,34 @@ public class EnemyDetection : MonoBehaviour
 
         visionThreshold = Mathf.Cos(visionAngle * 0.5f * Mathf.Deg2Rad);
 
+        /*
         // for Debuging eye
         Debug.DrawRay(transform.position,transform.forward * 3f ,Color.blue);
         Debug.DrawRay(transform.position,directionToPlayer * 3f,Color.red);
 
         return dot >= visionThreshold;
+        */
+
+        if (dot < visionThreshold)
+        {
+            return false;
+        }
+
+        Vector3 rayOrigin = transform.position + Vector3.up * 1f;
+        Vector3 rayTarget = player.position + Vector3.up * 1f;
+
+        Vector3 rayDirection = rayTarget - rayOrigin;
+
+        float rayDistance = rayDirection.magnitude;
+
+        rayDirection.Normalize();
+
+        if (Physics.Raycast(rayOrigin, rayDirection, rayDistance, obstacleMask))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public bool CanDetectPlayer()
