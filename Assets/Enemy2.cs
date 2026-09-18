@@ -4,6 +4,7 @@ using System.Data;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.InputSystem.XR.Haptics;
 using UnityEngine.UI;
@@ -18,7 +19,8 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
 
     [Header("Player Chase")]
-
+    [SerializeField] private EnemyNavigation map;
+    
     public bool CanThink { get; set; } = true;
 
     [SerializeField] private Transform player;
@@ -302,8 +304,9 @@ public class Enemy2 : MonoBehaviour, IDamageable
         {
             Debug.Log("-----------------Enemy Chasing--------------");
 
-            transform.position += direction * moveSpeed * Time.deltaTime;
+            //transform.position += direction * moveSpeed * Time.deltaTime;
 
+            map.MoveTo(player.position);
         }
 
         // To look in the direction of Player
@@ -347,7 +350,8 @@ public class Enemy2 : MonoBehaviour, IDamageable
         direction.y = 0f;
         direction.Normalize();
 
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        //transform.position += direction * moveSpeed * Time.deltaTime;
+        map.MoveTo(currentTarget.position);
 
         Debug.Log("-----------------Enemy Petrolling--------------");
         float distance = Vector3.Distance(transform.position, currentTarget.position);
@@ -403,7 +407,8 @@ public class Enemy2 : MonoBehaviour, IDamageable
 
         direction.Normalize();
 
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        //transform.position += direction * moveSpeed * Time.deltaTime;
+        map.MoveTo(enemyDetection.LastKnownPlayerPosition);
 
         Vector3 FlatEnemyPos = transform.position;
         Vector3 FlatTargetPos = enemyDetection.LastKnownPlayerPosition;

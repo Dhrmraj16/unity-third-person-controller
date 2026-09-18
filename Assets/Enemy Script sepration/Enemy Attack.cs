@@ -46,7 +46,6 @@ public class EnemyAttack : MonoBehaviour
         enemyAnimator.PlayAttack();
 
         Invoke(nameof(DealDamage), 0.5f);
-        //DealDamage();
 
         attackTimer = attackCooldown;
     }
@@ -64,7 +63,6 @@ public class EnemyAttack : MonoBehaviour
 
         isAttacking = false;
         enemyAnimator.SetAttacking(isAttacking);
-        //attackTimer = attackCooldown;
 
     }
 
